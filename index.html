@@ -34,19 +34,15 @@
     .status-closed { background:#ff3b30; }
     .main { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
     .card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px; }
-    .card h2 { font-size: 16px; margin-bottom: 14px; border-bottom: 1px solid #e5e5ea; padding-bottom: 6px; }
+    .card h2 { font-size: 16px; margin-bottom: 14px; border-bottom: 1px solid #e5e5ea; padding-bottom: 6px; display:flex; justify-content:space-between; align-items:center; }
     label { font-size: 14px; font-weight: 500; margin-bottom: 6px; display:block; }
     input,select,textarea {
       width: 100%; padding: 10px 12px; border: 1px solid #d2d2d7; border-radius: 8px;
       background: #fff; font-size: 14px;
     }
-    input:focus,select:focus,textarea:focus { border-color: var(--accent); outline: none; box-shadow: 0 0 0 3px rgba(0,122,255,.2); }
-    .form-group { margin-bottom: 14px; }
-    .btn { display: inline-block; border-radius: 8px; padding: 10px 16px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all .2s; }
+    .btn { display:inline-block; border-radius:8px; padding:6px 12px; font-size:13px; font-weight:500; cursor:pointer; }
     .btn-primary { background: linear-gradient(to bottom, var(--accent), var(--accent-dark)); color: #fff; border: none; }
-    .btn-primary:hover { background: linear-gradient(to bottom, #3395ff, #0064d2); }
     .btn-secondary { background:#e5e5ea; border:1px solid #c7c7cc; }
-    .alert { background:#fffbe6; color:#8c6d1f; border:1px solid #ffe58f; padding:12px 16px; border-radius: var(--radius); font-size:14px; display:none; }
     .stats { display:grid; grid-template-columns: repeat(2,1fr); gap:14px; }
     .stat-box { background:#f9f9fb; border-radius: var(--radius); padding:16px; text-align:center; }
     .stat-number { font-size:20px; font-weight:600; }
@@ -55,16 +51,14 @@
     .table-header { background: #f2f2f7; padding: 14px 18px; font-weight: 600; border-bottom:1px solid #e5e5ea; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; }
     .table-content { max-height: 300px; overflow-y:auto; }
     .record { display:grid; grid-template-columns: 100px 80px 100px 1fr 1fr; padding: 10px 16px; font-size:14px; border-bottom:1px solid #f0f0f5; }
-    .record:hover { background:#fafafa; }
-    .record-time { font-weight:500; color:var(--accent); }
     .record-type { font-size:12px; padding:2px 6px; border-radius:6px; text-align:center; font-weight:500; }
     .type-presencial { background:#eaf9ea; color:#34c759; }
     .type-telefonica { background:#fff8e6; color:#ff9500; }
     .type-whatsapp { background:#f3e8ff; color:#af52de; }
     @media print {
       body { background: #fff; }
-      .header, .status-bar, .main, .alert, .table-header { display: none !important; }
-      .records-table { box-shadow:none; }
+      .header, .status-bar, .main .card:first-child, .alert, .table-header { display: none !important; }
+      .records-table, .main .card:last-child { box-shadow:none; }
       .record { grid-template-columns: 120px 80px 120px 1fr 1fr; border:1px solid #ccc; }
       .print-header { display:block; text-align:center; margin-bottom:20px; }
       .print-header h2 { margin:0; }
@@ -83,10 +77,6 @@
       <span id="statusIndicator" class="status-indicator"></span>
       <span id="statusText"></span>
       <span id="currentTime"></span>
-    </div>
-
-    <div id="closedAlert" class="alert">
-      La oficina está cerrada. Horario: Lunes a Viernes de 7:00 a 12:00 hs.
     </div>
 
     <div class="main">
@@ -118,8 +108,11 @@
         </form>
       </div>
 
-      <div class="card">
-        <h2>Estadísticas del Día</h2>
+      <div class="card" id="statsCard">
+        <h2>
+          Estadísticas del Día
+          <button id="printStatsBtn" class="btn btn-secondary">🖨️ Imprimir</button>
+        </h2>
         <div class="stats">
           <div class="stat-box"><div id="totalAttentions" class="stat-number">0</div><div class="stat-label">Total</div></div>
           <div class="stat-box"><div id="presentialCount" class="stat-number">0</div><div class="stat-label">Presenciales</div></div>
@@ -193,17 +186,14 @@
     function updateStatus(){
       const ind=document.getElementById("statusIndicator");
       const txt=document.getElementById("statusText");
-      const alert=document.getElementById("closedAlert");
       const form=document.getElementById("attentionForm");
       if(isOpen()){
         ind.className="status-indicator status-open";
         txt.textContent="Oficina Abierta";
-        alert.style.display="none";
         form.querySelectorAll("input,select,textarea,button").forEach(el=>el.disabled=false);
       }else{
         ind.className="status-indicator status-closed";
         txt.textContent="Oficina Cerrada";
-        alert.style.display="block";
         form.querySelectorAll("input,select,textarea,button").forEach(el=>el.disabled=true);
       }
     }
@@ -226,7 +216,7 @@
         div.className="record";
         div.innerHTML=`
           <div>${r.timestamp?.toDate().toLocaleDateString("es-AR") || "-"}</div>
-          <div class="record-time">${r.time}</div>
+          <div>${r.time}</div>
           <div class="record-type type-${r.type}">${r.type[0].toUpperCase()+r.type.slice(1)}</div>
           <div><strong>${r.personName}</strong></div>
           <div>${r.assignedUser}</div>`;
@@ -266,10 +256,28 @@
       }catch(err){ console.error("Error guardando en Firestore: ",err); }
     });
 
+    // Imprimir listado
     document.getElementById("printBtn").addEventListener("click",()=>{ window.print(); });
+
+    // Imprimir solo estadísticas
+    document.getElementById("printStatsBtn").addEventListener("click",()=>{
+      let statsCard=document.getElementById("statsCard").innerHTML;
+      let w=window.open("");
+      w.document.write(`
+        <html>
+          <head><title>Estadísticas</title></head>
+          <body style="font-family:sans-serif;text-align:center">
+            <h2>Estadísticas de Atenciones</h2>
+            <p>Defensoría Civil y Comercial 6 · Poder Judicial de Misiones</p>
+            ${statsCard}
+            <script>window.print();<\/script>
+          </body>
+        </html>
+      `);
+      w.document.close();
+    });
 
     document.addEventListener("DOMContentLoaded",init);
   </script>
 </body>
 </html>
-
