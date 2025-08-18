@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Sistema Operador - Defensoría Civil y Comercial 6</title>
   <style>
     :root {
@@ -35,10 +35,10 @@
     .main { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
     .card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px; }
     .card h2 { font-size: 16px; margin-bottom: 14px; border-bottom: 1px solid #e5e5ea; padding-bottom: 6px; display:flex; justify-content:space-between; align-items:center; }
+    .form-group { margin-bottom: 14px; }
     label { font-size: 14px; font-weight: 500; margin-bottom: 6px; display:block; }
     input,select,textarea {
-      width: 100%; padding: 10px 12px; border: 1px solid #d2d2d7; border-radius: 8px;
-      background: #fff; font-size: 14px;
+      width: 100%; padding: 10px 12px; border: 1px solid #d2d2d7; border-radius: 8px; background: #fff; font-size: 14px;
     }
     .btn { display:inline-block; border-radius:8px; padding:6px 12px; font-size:13px; font-weight:500; cursor:pointer; }
     .btn-primary { background: linear-gradient(to bottom, var(--accent), var(--accent-dark)); color: #fff; border: none; }
@@ -55,15 +55,6 @@
     .type-presencial { background:#eaf9ea; color:#34c759; }
     .type-telefonica { background:#fff8e6; color:#ff9500; }
     .type-whatsapp { background:#f3e8ff; color:#af52de; }
-    @media print {
-      body { background: #fff; }
-      .header, .status-bar, .main .card:first-child, .alert, .table-header { display: none !important; }
-      .records-table, .main .card:last-child { box-shadow:none; }
-      .record { grid-template-columns: 120px 80px 120px 1fr 1fr; border:1px solid #ccc; }
-      .print-header { display:block; text-align:center; margin-bottom:20px; }
-      .print-header h2 { margin:0; }
-    }
-    .print-header { display:none; }
   </style>
 </head>
 <body>
@@ -80,6 +71,7 @@
     </div>
 
     <div class="main">
+      <!-- Formulario -->
       <div class="card">
         <h2>Registrar Atención</h2>
         <form id="attentionForm">
@@ -108,6 +100,7 @@
         </form>
       </div>
 
+      <!-- Estadísticas -->
       <div class="card" id="statsCard">
         <h2>
           Estadísticas del Día
@@ -122,6 +115,7 @@
       </div>
     </div>
 
+    <!-- Tabla de registros -->
     <div class="records-table">
       <div class="table-header">
         <span>Registro de Atenciones</span>
@@ -132,10 +126,6 @@
           <button id="printBtn" class="btn btn-secondary">🖨️ Imprimir Listado</button>
         </div>
       </div>
-      <div class="print-header">
-        <h2>Registro de Atenciones</h2>
-        <p>Defensoría Civil y Comercial 6 · Poder Judicial de Misiones</p>
-      </div>
       <div id="recordsContainer" class="table-content">
         <div style="padding:30px;text-align:center;color:var(--muted)">
           No hay registros para mostrar
@@ -144,6 +134,7 @@
     </div>
   </div>
 
+  <!-- Scripts -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
     import { getFirestore, collection, addDoc, onSnapshot, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
@@ -181,7 +172,7 @@
     }
     function isOpen(){
       const n=new Date(), d=n.getDay(), h=n.getHours();
-      return d>=1&&d<=5&&h>=7&&h<12;
+      return d>=1&&d<=5&&h>=7&&h<12; /* horario de prueba */
     }
     function updateStatus(){
       const ind=document.getElementById("statusIndicator");
@@ -256,20 +247,81 @@
       }catch(err){ console.error("Error guardando en Firestore: ",err); }
     });
 
-    // Imprimir listado
-    document.getElementById("printBtn").addEventListener("click",()=>{ window.print(); });
-
-    // Imprimir solo estadísticas
-    document.getElementById("printStatsBtn").addEventListener("click",()=>{
-      let statsCard=document.getElementById("statsCard").innerHTML;
+    // Imprimir listado con encabezado + responsable
+    document.getElementById("printBtn").addEventListener("click",()=>{
+      const recordsHTML=document.getElementById("recordsContainer").innerHTML;
+      const fechaHoy=new Date().toLocaleDateString("es-AR",{year:"numeric",month:"long",day:"numeric"});
       let w=window.open("");
       w.document.write(`
         <html>
-          <head><title>Estadísticas</title></head>
-          <body style="font-family:sans-serif;text-align:center">
+          <head>
+            <title>Listado de Atenciones</title>
+            <style>
+              body { font-family:sans-serif; margin:40px; }
+              h2 { text-align:center; margin:0; }
+              p { text-align:center; margin:4px 0; }
+              .record { display:grid; grid-template-columns: 120px 80px 120px 1fr 1fr; padding:6px; border-bottom:1px solid #ccc; font-size:14px; }
+              .record-type { font-size:12px; padding:2px 6px; border-radius:6px; text-align:center; font-weight:500; }
+              .type-presencial { background:#eaf9ea; color:#34c759; }
+              .type-telefonica { background:#fff8e6; color:#ff9500; }
+              .type-whatsapp { background:#f3e8ff; color:#af52de; }
+              .footer { margin-top:40px; font-size:14px; }
+              .firma { margin-top:40px; }
+            </style>
+          </head>
+          <body>
+            <h2>Registro de Atenciones</h2>
+            <p>Defensoría Civil y Comercial 6 · Poder Judicial de Misiones</p>
+            <div>${recordsHTML}</div>
+            <div class="footer">
+              <p>Fecha de impresión: <strong>${fechaHoy}</strong></p>
+              <div class="firma">
+                <p><strong>Responsable:</strong></p>
+                <p>Nombre y Apellido: ______________________________</p>
+                <p>Categoría: ______________________________</p>
+                <p>Legajo: ______________________________</p>
+              </div>
+            </div>
+            <script>window.print();<\/script>
+          </body>
+        </html>
+      `);
+      w.document.close();
+    });
+
+    // Imprimir estadísticas con encabezado + responsable
+    document.getElementById("printStatsBtn").addEventListener("click",()=>{
+      const fechaHoy=new Date().toLocaleDateString("es-AR",{year:"numeric",month:"long",day:"numeric"});
+      let w=window.open("");
+      w.document.write(`
+        <html>
+          <head>
+            <title>Estadísticas</title>
+            <style>
+              body { font-family:sans-serif; margin:40px; }
+              h2 { text-align:center; margin:0; }
+              p { text-align:center; margin:4px 0; }
+              .stats { display:grid; grid-template-columns: repeat(2,1fr); gap:14px; margin-top:20px; }
+              .stat-box { background:#f9f9fb; border:1px solid #ccc; border-radius:8px; padding:16px; text-align:center; }
+              .stat-number { font-size:20px; font-weight:600; }
+              .stat-label { font-size:12px; color:#555; }
+              .footer { margin-top:40px; font-size:14px; }
+              .firma { margin-top:40px; }
+            </style>
+          </head>
+          <body>
             <h2>Estadísticas de Atenciones</h2>
             <p>Defensoría Civil y Comercial 6 · Poder Judicial de Misiones</p>
-            ${statsCard}
+            ${document.querySelector("#statsCard .stats").outerHTML}
+            <div class="footer">
+              <p>Fecha de impresión: <strong>${fechaHoy}</strong></p>
+              <div class="firma">
+                <p><strong>Responsable:</strong></p>
+                <p>Nombre y Apellido: ______________________________</p>
+                <p>Categoría: ______________________________</p>
+                <p>Legajo: ______________________________</p>
+              </div>
+            </div>
             <script>window.print();<\/script>
           </body>
         </html>
