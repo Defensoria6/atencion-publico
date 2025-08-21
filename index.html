@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Sistema Operador - Defensoría Civil y Comercial 6</title>
+  <title>Registro de Atención al Público - Defensoría Civil y Comercial 6</title>
   <style>
     :root {
       --bg: #f4f6f9;
       --card: #ffffffcc;
       --accent: #007aff;
       --accent-dark: #0051a8;
-      --text: #1c1c1e;
-      --muted: #6e6e73;
+      --text: #0b5ed7;     /* Azul para todo el texto */
+      --muted: #0b5ed7cc;  /* Azul atenuado */
       --radius: 12px;
       --shadow: 0 4px 12px rgba(0,0,0,.08);
     }
@@ -23,7 +23,7 @@
       line-height: 1.5;
       padding: 20px;
     }
-    h1,h2 { font-weight:600; }
+    h1,h2 { font-weight:600; color: var(--text); }
     .container { max-width: 1100px; margin: auto; display: flex; flex-direction: column; gap: 20px; }
     .header { background: var(--card); padding: 24px; border-radius: var(--radius); box-shadow: var(--shadow); text-align: center; }
     .header h1 { font-size: 22px; margin-bottom: 6px; }
@@ -36,56 +36,43 @@
     .card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px; }
     .card h2 { font-size: 16px; margin-bottom: 14px; border-bottom: 1px solid #e5e5ea; padding-bottom: 6px; display:flex; justify-content:space-between; align-items:center; flex-wrap: wrap; gap: 10px; }
     .form-group { margin-bottom: 14px; }
-    label { font-size: 14px; font-weight: 500; margin-bottom: 6px; display:block; }
+    label { font-size: 14px; font-weight: 600; margin-bottom: 6px; display:block; color: var(--text); }
     input,select,textarea {
-      width: 100%; padding: 10px 12px; border: 1px solid #d2d2d7; border-radius: 8px; background: #fff; font-size: 14px;
+      width: 100%; padding: 10px 12px; border: 1px solid #bcd0f7; border-radius: 8px; background: #fff; font-size: 14px; color:#0b5ed7;
     }
-    .btn { display:inline-block; border-radius:8px; padding:6px 12px; font-size:13px; font-weight:500; cursor:pointer; }
+    .btn { display:inline-block; border-radius:8px; padding:6px 12px; font-size:13px; font-weight:700; cursor:pointer; }
     .btn-primary { background: linear-gradient(to bottom, var(--accent), var(--accent-dark)); color: #fff; border: none; }
-    .btn-secondary { background:#e5e5ea; border:1px solid #c7c7cc; }
+    .btn-secondary { background:#e5f0ff; border:1px solid #a9c6ff; color:#0b5ed7; }
+    .btn-danger { background:#ff3b30; color:#fff; border:none; }
     .stats { display:grid; grid-template-columns: repeat(2,1fr); gap:14px; }
-    .stat-box { background:#f9f9fb; border-radius: var(--radius); padding:16px; text-align:center; }
-    .stat-number { font-size:20px; font-weight:600; }
-    .stat-label { font-size:12px; color:var(--muted); }
+    .stat-box { background:#eef5ff; border-radius: var(--radius); padding:16px; text-align:center; }
+    .stat-number { font-size:20px; font-weight:700; color:#0847a6; }
+    .stat-label { font-size:12px; color:#0b5ed7; }
+    .chart-container { max-width:280px; margin:20px auto 0; }
     .records-table { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
-    .table-header { background: #f2f2f7; padding: 14px 18px; font-weight: 600; border-bottom:1px solid #e5e5ea; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; }
+    .table-header { background: #eaf2ff; padding: 14px 18px; font-weight: 700; border-bottom:1px solid #cfe0ff; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; color:#0b5ed7; }
     .table-content { max-height: 300px; overflow-y:auto; }
-    .record { display:grid; grid-template-columns: 100px 80px 100px 1fr 1fr; padding: 10px 16px; font-size:14px; border-bottom:1px solid #f0f0f5; gap: 6px; }
-    .record-type { font-size:12px; padding:2px 6px; border-radius:6px; text-align:center; font-weight:500; }
-    .type-presencial { background:#eaf9ea; color:#34c759; }
-    .type-telefonica { background:#fff8e6; color:#ff9500; }
-    .type-whatsapp { background:#f3e8ff; color:#af52de; }
-
-    /* ====== RESPONSIVE ====== */
-    @media (max-width: 1024px) {
-      .main { grid-template-columns: 1fr; }
-    }
-
-    @media (max-width: 768px) {
-      .header h1 { font-size: 20px; }
-      .card h2 { flex-direction: column; align-items: flex-start; }
-      .stats { grid-template-columns: 1fr 1fr; }
-      .record { grid-template-columns: 80px 60px 100px 1fr; font-size: 13px; }
-      .table-header { flex-direction: column; align-items: flex-start; }
-    }
-
-    @media (max-width: 480px) {
-      body { padding: 10px; }
-      .header h1 { font-size: 18px; }
-      .stats { grid-template-columns: 1fr; }
-      .record { grid-template-columns: 1fr; font-size: 12px; }
-      .record div { margin-bottom: 4px; }
-      .btn { width: 100%; text-align: center; }
-      .table-header { flex-direction: column; align-items: stretch; }
-    }
-
+    .record { display:grid; grid-template-columns: 110px 80px 110px 1fr 1fr 230px; padding: 10px 16px; font-size:14px; border-bottom:1px solid #d7e6ff; gap: 6px; align-items:center; }
+    .record-type { font-size:12px; padding:2px 6px; border-radius:6px; text-align:center; font-weight:700; }
+    .type-presencial { background:#eaf9ea; color:#2d9950; }
+    .type-telefonica { background:#fff8e6; color:#b36a00; }
+    .type-whatsapp { background:#f3e8ff; color:#7f3bb5; }
+    .record-actions { display:flex; gap:6px; flex-wrap:wrap; }
+    /* Modal */
+    .modal { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,.5); justify-content:center; align-items:center; z-index:1000; }
+    .modal-content { background:#fff; padding:20px; border-radius:var(--radius); max-width:600px; width:90%; max-height:80vh; overflow:auto; color:#0b5ed7; }
+    .modal-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+    .modal-header h3 { margin:0; color:#0b5ed7; }
+    .close-btn { background:none; border:none; font-size:20px; cursor:pointer; color:#0b5ed7; }
+    @media (max-width: 900px) { .main { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="header">
-      <h1>Sistema Operador</h1>
+      <h1>Registro de Atención al Público</h1>
       <p>Defensoría Civil y Comercial 6 · Poder Judicial de Misiones</p>
+      <p style="margin-top:6px;font-weight:700;">Horario: Lunes a Viernes 07:00–12:00 (excepto sábados, domingos y feriados)</p>
     </div>
 
     <div class="status-bar">
@@ -136,6 +123,9 @@
           <div class="stat-box"><div id="phoneCount" class="stat-number">0</div><div class="stat-label">Telefónicas</div></div>
           <div class="stat-box"><div id="whatsappCount" class="stat-number">0</div><div class="stat-label">WhatsApp</div></div>
         </div>
+        <div class="chart-container">
+          <canvas id="statsChart"></canvas>
+        </div>
       </div>
     </div>
 
@@ -158,11 +148,24 @@
     </div>
   </div>
 
+  <!-- Modal de vista -->
+  <div id="recordModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Detalle de Atención</h3>
+        <button class="close-btn" onclick="closeModal()">✕</button>
+      </div>
+      <div id="modalBody"></div>
+    </div>
+  </div>
+
   <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-    import { getFirestore, collection, addDoc, onSnapshot, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, onSnapshot, serverTimestamp, query, orderBy, updateDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
+    /* ========= Configuración ========= */
     const firebaseConfig = {
       apiKey: "AIzaSyDgxLS98sk6GkLrjMu3BVS2cmZ9exdh4dY",
       authDomain: "atencion-publico-def6.firebaseapp.com",
@@ -172,12 +175,40 @@
       appId: "1:1052433106688:web:8ac3e144bcf377ac4b55e5"
     };
 
+    // Horario de atención y feriados (formato DD/MM/AAAA)
+    const OPEN_HOUR = 7;
+    const CLOSE_HOUR = 12;
+    const FERIADOS = [
+      // Ejemplos (puedes editar):
+      // "01/01/2025", "24/03/2025", "02/04/2025", "01/05/2025", "09/07/2025", "08/12/2025", "25/12/2025"
+    ];
+
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
     const colRef = collection(db, "atencion");
 
+    let statsChart;
+
     const users = ["Bazante Nadia Romina","Boillat Cesar Enrique","Cardozo Maria Raquel","Cedron Noelia Aurora","Corrales Alicia Mariela","Escobar Monica Graciela","Fioravante Romulo","Gonzalez Alberto Misael","Gonzalez Juan Jose","Gudiño Natalia Esther","Magnani Enzo Luciano","Pablos Patricia","Palacios Ana Gabriela","Ortega Lucia Noemi","Ramos Marcelo Gustavo","Riveros Patricia Soledad","Sosa Rita Cecilia"];
 
+    /* ========= Utilidades de fecha/hora (DD/MM/AAAA y 24h) ========= */
+    const fmtFecha = (d)=> d ? d.toLocaleDateString("es-AR") : "-"; // DD/MM/AAAA
+    const fmtHora = (d)=> d ? d.toLocaleTimeString("es-AR", {hour12:false, hour:"2-digit", minute:"2-digit"}) : "--:--";
+
+    function esFeriado(date){
+      const ddmmyyyy = fmtFecha(date); // ya en DD/MM/AAAA
+      return FERIADOS.includes(ddmmyyyy);
+    }
+
+    function oficinaAbierta(date = new Date()){
+      const d = date.getDay(); // 0-dom,6-sab
+      if (d === 0 || d === 6) return false;       // sábado/domingo
+      if (esFeriado(date)) return false;          // feriado
+      const h = date.getHours();
+      return h >= OPEN_HOUR && h < CLOSE_HOUR;    // 07:00–11:59
+    }
+
+    /* ========= Inicialización ========= */
     function init(){
       const sel=document.getElementById("assignedUser");
       const filterSel=document.getElementById("filterUser");
@@ -188,31 +219,46 @@
       });
       updateClock(); updateStatus();
       setInterval(()=>{updateClock();updateStatus();},60000);
+      initChart();
+      bindPrinting();
+    }
+
+    function bindPrinting(){
+      document.getElementById("printBtn").addEventListener("click", ()=>{
+        const w = window.open("", "_blank");
+        const html = document.querySelector(".records-table").outerHTML;
+        w.document.write(`<html><head><title>Listado</title></head><body>${html}</body></html>`);
+        w.document.close(); w.focus(); w.print();
+      });
+      document.getElementById("printStatsBtn").addEventListener("click", ()=>{
+        const w = window.open("", "_blank");
+        const html = document.getElementById("statsCard").outerHTML;
+        w.document.write(`<html><head><title>Estadísticas</title></head><body>${html}</body></html>`);
+        w.document.close(); w.focus(); w.print();
+      });
     }
 
     function updateClock(){
       const now=new Date();
-      document.getElementById("currentTime").textContent="· "+now.toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'});
+      document.getElementById("currentTime").textContent="· " + fmtFecha(now) + " " + fmtHora(now);
     }
-    function isOpen(){
-      const n=new Date(), d=n.getDay(), h=n.getHours();
-      return d>=1&&d<=5&&h>=7&&h<12; /* horario de prueba */
-    }
+
     function updateStatus(){
       const ind=document.getElementById("statusIndicator");
       const txt=document.getElementById("statusText");
       const form=document.getElementById("attentionForm");
-      if(isOpen()){
+      if(oficinaAbierta()){
         ind.className="status-indicator status-open";
-        txt.textContent="Oficina Abierta";
+        txt.textContent="Oficina Abierta (Lun–Vie 07:00–12:00)";
         form.querySelectorAll("input,select,textarea,button").forEach(el=>el.disabled=false);
       }else{
         ind.className="status-indicator status-closed";
-        txt.textContent="Oficina Cerrada";
+        txt.textContent="Oficina Cerrada (sábados, domingos o fuera de horario / feriado)";
         form.querySelectorAll("input,select,textarea,button").forEach(el=>el.disabled=true);
       }
     }
 
+    /* ========= Render de registros + estadísticas ========= */
     function renderRecords(snapshot){
       const filterDate=document.getElementById("filterDate").value;
       const filterUser=document.getElementById("filterUser").value;
@@ -220,21 +266,33 @@
       const container=document.getElementById("recordsContainer");
       container.innerHTML="";
       let stats={total:0,presencial:0,telefonica:0,whatsapp:0};
-      snapshot.forEach(doc=>{
-        const r=doc.data();
-        let fecha=r.timestamp?.toDate().toISOString().slice(0,10);
-        if(filterDate && fecha!==filterDate) return;
+      snapshot.forEach(d=>{
+        const r=d.data();
+        const fechaObj = r.timestamp?.toDate?.() || null;
+        const iso = fechaObj ? fechaObj.toISOString().slice(0,10) : null; // para filtro exacto del input date
+        if(filterDate && iso !== filterDate) return;
         if(filterUser && r.assignedUser!==filterUser) return;
         if(filterPerson && !r.personName.toLowerCase().includes(filterPerson)) return;
-        stats.total++; stats[r.type]++;
+
+        stats.total++; if(stats[r.type]!==undefined) stats[r.type]++;
+
+        const fechaStr = fmtFecha(fechaObj);
+        const horaStr  = r.time || fmtHora(fechaObj);
+
         const div=document.createElement("div");
         div.className="record";
         div.innerHTML=`
-          <div>${r.timestamp?.toDate().toLocaleDateString("es-AR") || "-"}</div>
-          <div>${r.time}</div>
-          <div class="record-type type-${r.type}">${r.type[0].toUpperCase()+r.type.slice(1)}</div>
-          <div><strong>${r.personName}</strong></div>
-          <div>${r.assignedUser}</div>`;
+          <div>${fechaStr}</div>
+          <div>${horaStr}</div>
+          <div class="record-type type-${r.type}">${r.type ? (r.type[0].toUpperCase()+r.type.slice(1)) : "-"}</div>
+          <div><strong>${r.personName||""}</strong></div>
+          <div>${r.assignedUser||""}</div>
+          <div class="record-actions">
+            <button class="btn btn-secondary" onclick='viewRecord(${JSON.stringify({...r,id:d.id})})'>Ver</button>
+            <button class="btn btn-primary" onclick='editRecord(${JSON.stringify({...r,id:d.id})})'>Editar</button>
+            <button class="btn btn-primary" onclick='updateRecord("${d.id}")'>Actualizar</button>
+            <button class="btn btn-danger" onclick='deleteRecord("${d.id}")'>Eliminar</button>
+          </div>`;
         container.appendChild(div);
       });
       if(!container.innerHTML.trim()){
@@ -244,8 +302,34 @@
       document.getElementById("presentialCount").textContent=stats.presencial;
       document.getElementById("phoneCount").textContent=stats.telefonica;
       document.getElementById("whatsappCount").textContent=stats.whatsapp;
+      updateChart(stats);
     }
 
+    /* ========= Gráfico ========= */
+    function initChart(){
+      const ctx=document.getElementById("statsChart");
+      statsChart=new Chart(ctx,{
+        type:"pie",
+        data:{
+          labels:["Presenciales","Telefónicas","WhatsApp"],
+          datasets:[{
+            data:[0,0,0],
+            backgroundColor:["#34c759","#ff9500","#af52de"]
+          }]
+        },
+        options:{
+          responsive:true,
+          maintainAspectRatio:false,
+          plugins:{ legend:{ position:"bottom" } }
+        }
+      });
+    }
+    function updateChart(stats){
+      statsChart.data.datasets[0].data=[stats.presencial,stats.telefonica,stats.whatsapp];
+      statsChart.update();
+    }
+
+    /* ========= Firestore (realtime) ========= */
     const q=query(colRef, orderBy("timestamp","desc"));
     onSnapshot(q,(snapshot)=>{ renderRecords(snapshot); });
 
@@ -253,234 +337,65 @@
     document.getElementById("filterUser").addEventListener("change",()=>{ onSnapshot(q,(snapshot)=>{ renderRecords(snapshot); }); });
     document.getElementById("filterPerson").addEventListener("input",()=>{ onSnapshot(q,(snapshot)=>{ renderRecords(snapshot); }); });
 
+    /* ========= Alta / Edición / Actualización / Eliminación ========= */
     document.getElementById("attentionForm").addEventListener("submit",async(e)=>{
       e.preventDefault();
-      if(!isOpen()){ alert("Oficina cerrada."); return; }
+      if(!oficinaAbierta()){ alert("Oficina cerrada (Lun–Vie 07:00–12:00, excepto feriados)."); return; }
       const now=new Date();
       const rec={
-        time: now.toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'}),
+        time: fmtHora(now),                              // 24h
         personName: personName.value,
         type: attentionType.value,
         assignedUser: assignedUser.value,
         description: description.value,
-        timestamp: serverTimestamp()
+        timestamp: serverTimestamp()                    // fecha se mostrará como DD/MM/AAAA
       };
-      try{
-        await addDoc(colRef,rec);
-        e.target.reset();
-      }catch(err){ console.error("Error guardando en Firestore: ",err); }
+      try{ await addDoc(colRef,rec); e.target.reset(); }
+      catch(err){ console.error("Error guardando en Firestore: ",err); }
     });
 
-    // Imprimir listado con encabezado + responsable
-    document.getElementById("printBtn").addEventListener("click",()=>{
-      const recordsHTML=document.getElementById("recordsContainer").innerHTML;
-      const fechaHoy=new Date().toLocaleDateString("es-AR",{year:"numeric",month:"long",day:"numeric"});
-      let w=window.open("");
-      w.document.write(`
-        <html>
-          <head>
-            <title>Listado de Atenciones</title>
-            <style>
-    :root {
-      --bg: #f4f6f9;
-      --card: #ffffffcc;
-      --accent: #007aff;
-      --accent-dark: #0051a8;
-      --text: #1c1c1e;
-      --muted: #6e6e73;
-      --radius: 12px;
-      --shadow: 0 4px 12px rgba(0,0,0,.08);
+    // Modal (ver)
+    window.viewRecord=(r)=>{
+      const fechaObj = r.timestamp?.toDate?.() || null;
+      const fechaStr = fmtFecha(fechaObj);
+      const horaStr  = r.time || fmtHora(fechaObj);
+      document.getElementById("modalBody").innerHTML=`
+        <p><b>Fecha:</b> ${fechaStr} ${horaStr}</p>
+        <p><b>Nombre:</b> ${r.personName||""}</p>
+        <p><b>Tipo:</b> ${r.type||""}</p>
+        <p><b>Usuario:</b> ${r.assignedUser||""}</p>
+        <p><b>Descripción:</b><br>${(r.description||"").replace(/\n/g,"<br>")}</p>`;
+      document.getElementById("recordModal").style.display="flex";
     }
-    * { box-sizing: border-box; margin:0; padding:0; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.5;
-      padding: 20px;
-    }
-    h1,h2 { font-weight:600; }
-    .container { max-width: 1100px; margin: auto; display: flex; flex-direction: column; gap: 20px; }
-    .header { background: var(--card); padding: 24px; border-radius: var(--radius); box-shadow: var(--shadow); text-align: center; }
-    .header h1 { font-size: 22px; margin-bottom: 6px; }
-    .header p { color: var(--muted); font-size: 14px; }
-    .status-bar { background: var(--card); padding: 14px 20px; border-radius: var(--radius); box-shadow: var(--shadow); display: flex; justify-content: center; align-items: center; gap: 8px; flex-wrap: wrap; }
-    .status-indicator { width: 10px; height: 10px; border-radius: 50%; }
-    .status-open { background:#34c759; }
-    .status-closed { background:#ff3b30; }
-    .main { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-    .card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px; }
-    .card h2 { font-size: 16px; margin-bottom: 14px; border-bottom: 1px solid #e5e5ea; padding-bottom: 6px; display:flex; justify-content:space-between; align-items:center; flex-wrap: wrap; gap: 10px; }
-    .form-group { margin-bottom: 14px; }
-    label { font-size: 14px; font-weight: 500; margin-bottom: 6px; display:block; }
-    input,select,textarea {
-      width: 100%; padding: 10px 12px; border: 1px solid #d2d2d7; border-radius: 8px; background: #fff; font-size: 14px;
-    }
-    .btn { display:inline-block; border-radius:8px; padding:6px 12px; font-size:13px; font-weight:500; cursor:pointer; }
-    .btn-primary { background: linear-gradient(to bottom, var(--accent), var(--accent-dark)); color: #fff; border: none; }
-    .btn-secondary { background:#e5e5ea; border:1px solid #c7c7cc; }
-    .stats { display:grid; grid-template-columns: repeat(2,1fr); gap:14px; }
-    .stat-box { background:#f9f9fb; border-radius: var(--radius); padding:16px; text-align:center; }
-    .stat-number { font-size:20px; font-weight:600; }
-    .stat-label { font-size:12px; color:var(--muted); }
-    .records-table { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
-    .table-header { background: #f2f2f7; padding: 14px 18px; font-weight: 600; border-bottom:1px solid #e5e5ea; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; }
-    .table-content { max-height: 300px; overflow-y:auto; }
-    .record { display:grid; grid-template-columns: 100px 80px 100px 1fr 1fr; padding: 10px 16px; font-size:14px; border-bottom:1px solid #f0f0f5; gap: 6px; }
-    .record-type { font-size:12px; padding:2px 6px; border-radius:6px; text-align:center; font-weight:500; }
-    .type-presencial { background:#eaf9ea; color:#34c759; }
-    .type-telefonica { background:#fff8e6; color:#ff9500; }
-    .type-whatsapp { background:#f3e8ff; color:#af52de; }
+    window.closeModal=()=>{document.getElementById("recordModal").style.display="none";}
 
-    /* ====== RESPONSIVE ====== */
-    @media (max-width: 1024px) {
-      .main { grid-template-columns: 1fr; }
+    // Editar (carga en el form)
+    window.editRecord=(r)=>{
+      personName.value=r.personName||"";
+      attentionType.value=r.type||"";
+      assignedUser.value=r.assignedUser||"";
+      description.value=r.description||"";
+      window.scrollTo({top:0,behavior:"smooth"});
     }
 
-    @media (max-width: 768px) {
-      .header h1 { font-size: 20px; }
-      .card h2 { flex-direction: column; align-items: flex-start; }
-      .stats { grid-template-columns: 1fr 1fr; }
-      .record { grid-template-columns: 80px 60px 100px 1fr; font-size: 13px; }
-      .table-header { flex-direction: column; align-items: flex-start; }
+    // Actualizar (ejemplo simple: actualiza con lo que esté en el form)
+    window.updateRecord=async(id)=>{
+      const ref=doc(db,"atencion",id);
+      await updateDoc(ref,{
+        personName: personName.value,
+        type: attentionType.value,
+        assignedUser: assignedUser.value,
+        description: description.value
+      });
+      alert("Registro actualizado");
     }
 
-    @media (max-width: 480px) {
-      body { padding: 10px; }
-      .header h1 { font-size: 18px; }
-      .stats { grid-template-columns: 1fr; }
-      .record { grid-template-columns: 1fr; font-size: 12px; }
-      .record div { margin-bottom: 4px; }
-      .btn { width: 100%; text-align: center; }
-      .table-header { flex-direction: column; align-items: stretch; }
+    // Eliminar
+    window.deleteRecord=async(id)=>{
+      if(confirm("¿Eliminar registro?")){
+        await deleteDoc(doc(db,"atencion",id));
+      }
     }
-
-  </style>
-          </head>
-          <body>
-            <h2>Registro de Atenciones</h2>
-            <p>Defensoría Civil y Comercial 6 · Poder Judicial de Misiones</p>
-            <div>${recordsHTML}</div>
-            <div class="footer">
-              <p>Fecha de impresión: <strong>${fechaHoy}</strong></p>
-              <div class="firma">
-                <p><strong>Responsable:</strong></p>
-                <p>Nombre y Apellido: ______________________________</p>
-                <p>Categoría: ______________________________</p>
-                <p>Legajo: ______________________________</p>
-              </div>
-            </div>
-            <script>window.print();<\/script>
-          </body>
-        </html>
-      `);
-      w.document.close();
-    });
-
-    // Imprimir estadísticas con encabezado + responsable
-    document.getElementById("printStatsBtn").addEventListener("click",()=>{
-      const fechaHoy=new Date().toLocaleDateString("es-AR",{year:"numeric",month:"long",day:"numeric"});
-      let w=window.open("");
-      w.document.write(`
-        <html>
-          <head>
-            <title>Estadísticas</title>
-            <style>
-    :root {
-      --bg: #f4f6f9;
-      --card: #ffffffcc;
-      --accent: #007aff;
-      --accent-dark: #0051a8;
-      --text: #1c1c1e;
-      --muted: #6e6e73;
-      --radius: 12px;
-      --shadow: 0 4px 12px rgba(0,0,0,.08);
-    }
-    * { box-sizing: border-box; margin:0; padding:0; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.5;
-      padding: 20px;
-    }
-    h1,h2 { font-weight:600; }
-    .container { max-width: 1100px; margin: auto; display: flex; flex-direction: column; gap: 20px; }
-    .header { background: var(--card); padding: 24px; border-radius: var(--radius); box-shadow: var(--shadow); text-align: center; }
-    .header h1 { font-size: 22px; margin-bottom: 6px; }
-    .header p { color: var(--muted); font-size: 14px; }
-    .status-bar { background: var(--card); padding: 14px 20px; border-radius: var(--radius); box-shadow: var(--shadow); display: flex; justify-content: center; align-items: center; gap: 8px; flex-wrap: wrap; }
-    .status-indicator { width: 10px; height: 10px; border-radius: 50%; }
-    .status-open { background:#34c759; }
-    .status-closed { background:#ff3b30; }
-    .main { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-    .card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px; }
-    .card h2 { font-size: 16px; margin-bottom: 14px; border-bottom: 1px solid #e5e5ea; padding-bottom: 6px; display:flex; justify-content:space-between; align-items:center; flex-wrap: wrap; gap: 10px; }
-    .form-group { margin-bottom: 14px; }
-    label { font-size: 14px; font-weight: 500; margin-bottom: 6px; display:block; }
-    input,select,textarea {
-      width: 100%; padding: 10px 12px; border: 1px solid #d2d2d7; border-radius: 8px; background: #fff; font-size: 14px;
-    }
-    .btn { display:inline-block; border-radius:8px; padding:6px 12px; font-size:13px; font-weight:500; cursor:pointer; }
-    .btn-primary { background: linear-gradient(to bottom, var(--accent), var(--accent-dark)); color: #fff; border: none; }
-    .btn-secondary { background:#e5e5ea; border:1px solid #c7c7cc; }
-    .stats { display:grid; grid-template-columns: repeat(2,1fr); gap:14px; }
-    .stat-box { background:#f9f9fb; border-radius: var(--radius); padding:16px; text-align:center; }
-    .stat-number { font-size:20px; font-weight:600; }
-    .stat-label { font-size:12px; color:var(--muted); }
-    .records-table { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
-    .table-header { background: #f2f2f7; padding: 14px 18px; font-weight: 600; border-bottom:1px solid #e5e5ea; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; }
-    .table-content { max-height: 300px; overflow-y:auto; }
-    .record { display:grid; grid-template-columns: 100px 80px 100px 1fr 1fr; padding: 10px 16px; font-size:14px; border-bottom:1px solid #f0f0f5; gap: 6px; }
-    .record-type { font-size:12px; padding:2px 6px; border-radius:6px; text-align:center; font-weight:500; }
-    .type-presencial { background:#eaf9ea; color:#34c759; }
-    .type-telefonica { background:#fff8e6; color:#ff9500; }
-    .type-whatsapp { background:#f3e8ff; color:#af52de; }
-
-    /* ====== RESPONSIVE ====== */
-    @media (max-width: 1024px) {
-      .main { grid-template-columns: 1fr; }
-    }
-
-    @media (max-width: 768px) {
-      .header h1 { font-size: 20px; }
-      .card h2 { flex-direction: column; align-items: flex-start; }
-      .stats { grid-template-columns: 1fr 1fr; }
-      .record { grid-template-columns: 80px 60px 100px 1fr; font-size: 13px; }
-      .table-header { flex-direction: column; align-items: flex-start; }
-    }
-
-    @media (max-width: 480px) {
-      body { padding: 10px; }
-      .header h1 { font-size: 18px; }
-      .stats { grid-template-columns: 1fr; }
-      .record { grid-template-columns: 1fr; font-size: 12px; }
-      .record div { margin-bottom: 4px; }
-      .btn { width: 100%; text-align: center; }
-      .table-header { flex-direction: column; align-items: stretch; }
-    }
-
-  </style>
-          </head>
-          <body>
-            <h2>Estadísticas de Atenciones</h2>
-            <p>Defensoría Civil y Comercial 6 · Poder Judicial de Misiones</p>
-            ${document.querySelector("#statsCard .stats").outerHTML}
-            <div class="footer">
-              <p>Fecha de impresión: <strong>${fechaHoy}</strong></p>
-              <div class="firma">
-                <p><strong>Responsable:</strong></p>
-                <p>Nombre y Apellido: ______________________________</p>
-                <p>Categoría: ______________________________</p>
-                <p>Legajo: ______________________________</p>
-              </div>
-            </div>
-            <script>window.print();<\/script>
-          </body>
-        </html>
-      `);
-      w.document.close();
-    });
 
     document.addEventListener("DOMContentLoaded",init);
   </script>
