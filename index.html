@@ -10,61 +10,90 @@
       --card: #ffffffcc;
       --accent: #007aff;
       --accent-dark: #0051a8;
-      --text: #0b5ed7;     /* Azul para todo el texto */
-      --muted: #0b5ed7cc;  /* Azul atenuado */
+      --text: #0b5ed7;
+      --muted: #0b5ed7cc;
       --radius: 12px;
       --shadow: 0 4px 12px rgba(0,0,0,.08);
     }
     * { box-sizing: border-box; margin:0; padding:0; }
+    html { height: 100%; }
     body {
+      min-height: 100%;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background: var(--bg);
       color: var(--text);
       line-height: 1.5;
-      padding: 20px;
+      padding: clamp(12px, 2vw, 24px);
     }
     h1,h2 { font-weight:600; color: var(--text); }
-    .container { max-width: 1100px; margin: auto; display: flex; flex-direction: column; gap: 20px; }
-    .header { background: var(--card); padding: 24px; border-radius: var(--radius); box-shadow: var(--shadow); text-align: center; }
-    .header h1 { font-size: 22px; margin-bottom: 6px; }
-    .header p { color: var(--muted); font-size: 14px; }
-    .status-bar { background: var(--card); padding: 14px 20px; border-radius: var(--radius); box-shadow: var(--shadow); display: flex; justify-content: center; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .container { width: min(1200px, 100%); margin-inline: auto; display: flex; flex-direction: column; gap: clamp(12px, 2vw, 20px); }
+    .header { background: var(--card); padding: clamp(16px, 2vw, 24px); border-radius: var(--radius); box-shadow: var(--shadow); text-align: center; }
+    .header h1 { font-size: clamp(18px, 2.8vw, 26px); margin-bottom: 6px; }
+    .header p { color: var(--muted); font-size: clamp(12px, 1.8vw, 14px); }
+    .status-bar { background: var(--card); padding: 12px clamp(12px,2vw,20px); border-radius: var(--radius); box-shadow: var(--shadow); display: flex; justify-content: center; align-items: center; gap: 8px; flex-wrap: wrap; }
     .status-indicator { width: 10px; height: 10px; border-radius: 50%; }
     .status-open { background:#34c759; }
     .status-closed { background:#ff3b30; }
-    .main { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-    .card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px; }
-    .card h2 { font-size: 16px; margin-bottom: 14px; border-bottom: 1px solid #e5e5ea; padding-bottom: 6px; display:flex; justify-content:space-between; align-items:center; flex-wrap: wrap; gap: 10px; }
-    .form-group { margin-bottom: 14px; }
+    .main { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(12px,2vw,20px); }
+    .card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: clamp(14px, 2vw, 20px); }
+    .card h2 { font-size: clamp(16px, 2.2vw, 18px); margin-bottom: 12px; border-bottom: 1px solid #e5e5ea; padding-bottom: 6px; display:flex; justify-content:space-between; align-items:center; flex-wrap: wrap; gap: 10px; }
+    .form-group { margin-bottom: 12px; }
     label { font-size: 14px; font-weight: 600; margin-bottom: 6px; display:block; color: var(--text); }
     input,select,textarea {
       width: 100%; padding: 10px 12px; border: 1px solid #bcd0f7; border-radius: 8px; background: #fff; font-size: 14px; color:#0b5ed7;
     }
-    .btn { display:inline-block; border-radius:8px; padding:6px 12px; font-size:13px; font-weight:700; cursor:pointer; }
+    .btn { display:inline-block; border-radius:8px; padding:8px 12px; font-size:13px; font-weight:700; cursor:pointer; }
     .btn-primary { background: linear-gradient(to bottom, var(--accent), var(--accent-dark)); color: #fff; border: none; }
     .btn-secondary { background:#e5f0ff; border:1px solid #a9c6ff; color:#0b5ed7; }
     .btn-danger { background:#ff3b30; color:#fff; border:none; }
-    .stats { display:grid; grid-template-columns: repeat(2,1fr); gap:14px; }
+    .stats { display:grid; grid-template-columns: repeat(3,1fr); gap:12px; }
     .stat-box { background:#eef5ff; border-radius: var(--radius); padding:16px; text-align:center; }
-    .stat-number { font-size:20px; font-weight:700; color:#0847a6; }
+    .stat-number { font-size: clamp(18px, 3vw, 22px); font-weight:700; color:#0847a6; }
     .stat-label { font-size:12px; color:#0b5ed7; }
-    .chart-container { max-width:280px; margin:20px auto 0; }
+    .chart-container { max-width:320px; height:260px; margin:16px auto 0; }
     .records-table { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
-    .table-header { background: #eaf2ff; padding: 14px 18px; font-weight: 700; border-bottom:1px solid #cfe0ff; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; color:#0b5ed7; }
-    .table-content { max-height: 300px; overflow-y:auto; }
-    .record { display:grid; grid-template-columns: 110px 80px 110px 1fr 1fr 230px; padding: 10px 16px; font-size:14px; border-bottom:1px solid #d7e6ff; gap: 6px; align-items:center; }
+    .table-header { background: #eaf2ff; padding: 12px clamp(12px,2vw,18px); font-weight: 700; border-bottom:1px solid #cfe0ff; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; color:#0b5ed7; }
+    .filters { display:flex; gap:8px; flex-wrap:wrap; width:100%; justify-content:flex-end; }
+    .filters > * { flex: 1 1 160px; min-width: 120px; }
+    .table-content { max-height: min(60vh, 560px); overflow-y:auto; }
+    .record { display:grid; grid-template-columns: 110px 80px 110px 1.2fr 1fr 260px; padding: 10px 12px; font-size:14px; border-bottom:1px solid #d7e6ff; gap: 8px; align-items:center; }
     .record-type { font-size:12px; padding:2px 6px; border-radius:6px; text-align:center; font-weight:700; }
     .type-presencial { background:#eaf9ea; color:#2d9950; }
     .type-telefonica { background:#fff8e6; color:#b36a00; }
     .type-whatsapp { background:#f3e8ff; color:#7f3bb5; }
     .record-actions { display:flex; gap:6px; flex-wrap:wrap; }
+    /* Compactar en pantallas medianas */
+    @media (max-width: 1000px) {
+      .main { grid-template-columns: 1fr; }
+      .record { grid-template-columns: 90px 70px 100px 1fr; }
+      .record .record-actions { grid-column: 1 / -1; }
+    }
+    /* Diseño tipo tarjetas en móviles */
+    @media (max-width: 640px) {
+      .table-content { max-height: unset; }
+      .record { grid-template-columns: 1fr 1fr; grid-template-areas:
+        "fecha hora"
+        "tipo  tipo"
+        "persona persona"
+        "usuario usuario"
+        "acciones acciones";
+        row-gap: 6px;
+      }
+      .record > div:nth-child(1) { grid-area: fecha; }
+      .record > div:nth-child(2) { grid-area: hora; text-align:right; }
+      .record > div:nth-child(3) { grid-area: tipo; }
+      .record > div:nth-child(4) { grid-area: persona; }
+      .record > div:nth-child(5) { grid-area: usuario; }
+      .record > div:nth-child(6) { grid-area: acciones; }
+      .filters > * { flex: 1 1 100%; min-width: 0; }
+      .chart-container { width: 100%; height: 220px; }
+    }
     /* Modal */
-    .modal { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,.5); justify-content:center; align-items:center; z-index:1000; }
-    .modal-content { background:#fff; padding:20px; border-radius:var(--radius); max-width:600px; width:90%; max-height:80vh; overflow:auto; color:#0b5ed7; }
+    .modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,.5); justify-content:center; align-items:center; z-index:1000; padding: 16px; }
+    .modal-content { background:#fff; padding:20px; border-radius:var(--radius); max-width:600px; width:100%; max-height:80vh; overflow:auto; color:#0b5ed7; }
     .modal-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
     .modal-header h3 { margin:0; color:#0b5ed7; }
     .close-btn { background:none; border:none; font-size:20px; cursor:pointer; color:#0b5ed7; }
-    @media (max-width: 900px) { .main { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
@@ -133,7 +162,7 @@
     <div class="records-table">
       <div class="table-header">
         <span>Registro de Atenciones</span>
-        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+        <div class="filters">
           <input type="date" id="filterDate">
           <select id="filterUser"><option value="">Todos los usuarios</option></select>
           <input type="text" id="filterPerson" placeholder="Buscar persona...">
@@ -162,13 +191,18 @@
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script type="module">
+    /* ========= Firebase App + Realtime Database ========= */
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-    import { getFirestore, collection, addDoc, onSnapshot, serverTimestamp, query, orderBy, updateDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+    import {
+      getDatabase, ref, push, onValue, update, remove,
+      serverTimestamp, query, orderByChild
+    } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
     /* ========= Configuración ========= */
     const firebaseConfig = {
       apiKey: "AIzaSyDgxLS98sk6GkLrjMu3BVS2cmZ9exdh4dY",
       authDomain: "atencion-publico-def6.firebaseapp.com",
+      databaseURL: "https://atencion-publico-def6-default-rtdb.firebaseio.com",
       projectId: "atencion-publico-def6",
       storageBucket: "atencion-publico-def6.firebasestorage.app",
       messagingSenderId: "1052433106688",
@@ -179,15 +213,15 @@
     const OPEN_HOUR = 7;
     const CLOSE_HOUR = 12;
     const FERIADOS = [
-      // Ejemplos (puedes editar):
-      // "01/01/2025", "24/03/2025", "02/04/2025", "01/05/2025", "09/07/2025", "08/12/2025", "25/12/2025"
+      // "01/01/2025","24/03/2025","02/04/2025","01/05/2025","09/07/2025","08/12/2025","25/12/2025"
     ];
 
     const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const colRef = collection(db, "atencion");
+    const db = getDatabase(app);
+    const baseRef = ref(db, "atencion");
 
     let statsChart;
+    let recordsCache = []; // cache local para filtros/orden
 
     const users = ["Bazante Nadia Romina","Boillat Cesar Enrique","Cardozo Maria Raquel","Cedron Noelia Aurora","Corrales Alicia Mariela","Escobar Monica Graciela","Fioravante Romulo","Gonzalez Alberto Misael","Gonzalez Juan Jose","Gudiño Natalia Esther","Magnani Enzo Luciano","Pablos Patricia","Palacios Ana Gabriela","Ortega Lucia Noemi","Ramos Marcelo Gustavo","Riveros Patricia Soledad","Sosa Rita Cecilia"];
 
@@ -196,16 +230,16 @@
     const fmtHora = (d)=> d ? d.toLocaleTimeString("es-AR", {hour12:false, hour:"2-digit", minute:"2-digit"}) : "--:--";
 
     function esFeriado(date){
-      const ddmmyyyy = fmtFecha(date); // ya en DD/MM/AAAA
+      const ddmmyyyy = fmtFecha(date);
       return FERIADOS.includes(ddmmyyyy);
     }
 
     function oficinaAbierta(date = new Date()){
       const d = date.getDay(); // 0-dom,6-sab
-      if (d === 0 || d === 6) return false;       // sábado/domingo
-      if (esFeriado(date)) return false;          // feriado
+      if (d === 0 || d === 6) return false;
+      if (esFeriado(date)) return false;
       const h = date.getHours();
-      return h >= OPEN_HOUR && h < CLOSE_HOUR;    // 07:00–11:59
+      return h >= OPEN_HOUR && h < CLOSE_HOUR; // 07:00–11:59
     }
 
     /* ========= Inicialización ========= */
@@ -221,21 +255,29 @@
       setInterval(()=>{updateClock();updateStatus();},60000);
       initChart();
       bindPrinting();
+      bindFilters();
+      startRealtime();
     }
 
     function bindPrinting(){
       document.getElementById("printBtn").addEventListener("click", ()=>{
         const w = window.open("", "_blank");
         const html = document.querySelector(".records-table").outerHTML;
-        w.document.write(`<html><head><title>Listado</title></head><body>${html}</body></html>`);
+        w.document.write(`<html><head><title>Listado</title><meta name="viewport" content="width=device-width, initial-scale=1.0"></head><body>${html}</body></html>`);
         w.document.close(); w.focus(); w.print();
       });
       document.getElementById("printStatsBtn").addEventListener("click", ()=>{
         const w = window.open("", "_blank");
         const html = document.getElementById("statsCard").outerHTML;
-        w.document.write(`<html><head><title>Estadísticas</title></head><body>${html}</body></html>`);
+        w.document.write(`<html><head><title>Estadísticas</title><meta name="viewport" content="width=device-width, initial-scale=1.0"></head><body>${html}</body></html>`);
         w.document.close(); w.focus(); w.print();
       });
+    }
+
+    function bindFilters(){
+      document.getElementById("filterDate").addEventListener("change", ()=> renderRecords(recordsCache));
+      document.getElementById("filterUser").addEventListener("change", ()=> renderRecords(recordsCache));
+      document.getElementById("filterPerson").addEventListener("input", ()=> renderRecords(recordsCache));
     }
 
     function updateClock(){
@@ -258,27 +300,46 @@
       }
     }
 
+    /* ========= Realtime Database (listen) ========= */
+    function startRealtime(){
+      // Ordenaremos por timestamp en cliente (desc), ya que Realtime Database no tiene "desc"
+      const qRef = query(baseRef, orderByChild("timestamp"));
+      onValue(qRef, (snapshot)=>{
+        const arr = [];
+        snapshot.forEach(child => {
+          const val = child.val() || {};
+          arr.push({ ...val, id: child.key });
+        });
+        // Orden descendente por timestamp
+        arr.sort((a,b) => (b.timestamp||0) - (a.timestamp||0));
+        recordsCache = arr;
+        renderRecords(recordsCache);
+      });
+    }
+
     /* ========= Render de registros + estadísticas ========= */
-    function renderRecords(snapshot){
-      const filterDate=document.getElementById("filterDate").value;
+    function renderRecords(records){
+      const filterDate=document.getElementById("filterDate").value; // YYYY-MM-DD
       const filterUser=document.getElementById("filterUser").value;
       const filterPerson=document.getElementById("filterPerson").value.toLowerCase();
       const container=document.getElementById("recordsContainer");
       container.innerHTML="";
       let stats={total:0,presencial:0,telefonica:0,whatsapp:0};
-      snapshot.forEach(d=>{
-        const r=d.data();
-        const fechaObj = r.timestamp?.toDate?.() || null;
-        const iso = fechaObj ? fechaObj.toISOString().slice(0,10) : null; // para filtro exacto del input date
-        if(filterDate && iso !== filterDate) return;
-        if(filterUser && r.assignedUser!==filterUser) return;
-        if(filterPerson && !r.personName.toLowerCase().includes(filterPerson)) return;
 
+      const filtered = records.filter(r=>{
+        const fechaObj = r.timestamp ? new Date(r.timestamp) : null;
+        const iso = fechaObj ? new Date(fechaObj.getTime() - (fechaObj.getTimezoneOffset()*60000)).toISOString().slice(0,10) : null;
+        if(filterDate && iso !== filterDate) return false;
+        if(filterUser && r.assignedUser!==filterUser) return false;
+        if(filterPerson && !(r.personName||"").toLowerCase().includes(filterPerson)) return false;
+        return true;
+      });
+
+      filtered.forEach(r=>{
         stats.total++; if(stats[r.type]!==undefined) stats[r.type]++;
-
+        const fechaObj = r.timestamp ? new Date(r.timestamp) : null;
         const fechaStr = fmtFecha(fechaObj);
         const horaStr  = r.time || fmtHora(fechaObj);
-
         const div=document.createElement("div");
         div.className="record";
         div.innerHTML=`
@@ -288,13 +349,14 @@
           <div><strong>${r.personName||""}</strong></div>
           <div>${r.assignedUser||""}</div>
           <div class="record-actions">
-            <button class="btn btn-secondary" onclick='viewRecord(${JSON.stringify({...r,id:d.id})})'>Ver</button>
-            <button class="btn btn-primary" onclick='editRecord(${JSON.stringify({...r,id:d.id})})'>Editar</button>
-            <button class="btn btn-primary" onclick='updateRecord("${d.id}")'>Actualizar</button>
-            <button class="btn btn-danger" onclick='deleteRecord("${d.id}")'>Eliminar</button>
+            <button class="btn btn-secondary" onclick='viewRecord(${JSON.stringify(r)})'>Ver</button>
+            <button class="btn btn-primary" onclick='editRecord(${JSON.stringify(r)})'>Editar</button>
+            <button class="btn btn-primary" onclick='updateRecord(${JSON.stringify(r.id)})'>Actualizar</button>
+            <button class="btn btn-danger" onclick='deleteRecord(${JSON.stringify(r.id)})'>Eliminar</button>
           </div>`;
         container.appendChild(div);
       });
+
       if(!container.innerHTML.trim()){
         container.innerHTML="<div style='padding:30px;text-align:center;color:var(--muted)'>No hay registros para mostrar</div>";
       }
@@ -329,34 +391,31 @@
       statsChart.update();
     }
 
-    /* ========= Firestore (realtime) ========= */
-    const q=query(colRef, orderBy("timestamp","desc"));
-    onSnapshot(q,(snapshot)=>{ renderRecords(snapshot); });
-
-    document.getElementById("filterDate").addEventListener("change",()=>{ onSnapshot(q,(snapshot)=>{ renderRecords(snapshot); }); });
-    document.getElementById("filterUser").addEventListener("change",()=>{ onSnapshot(q,(snapshot)=>{ renderRecords(snapshot); }); });
-    document.getElementById("filterPerson").addEventListener("input",()=>{ onSnapshot(q,(snapshot)=>{ renderRecords(snapshot); }); });
-
     /* ========= Alta / Edición / Actualización / Eliminación ========= */
     document.getElementById("attentionForm").addEventListener("submit",async(e)=>{
       e.preventDefault();
       if(!oficinaAbierta()){ alert("Oficina cerrada (Lun–Vie 07:00–12:00, excepto feriados)."); return; }
       const now=new Date();
       const rec={
-        time: fmtHora(now),                              // 24h
+        time: fmtHora(now),
         personName: personName.value,
         type: attentionType.value,
         assignedUser: assignedUser.value,
         description: description.value,
-        timestamp: serverTimestamp()                    // fecha se mostrará como DD/MM/AAAA
+        timestamp: serverTimestamp()
       };
-      try{ await addDoc(colRef,rec); e.target.reset(); }
-      catch(err){ console.error("Error guardando en Firestore: ",err); }
+      try{
+        await push(baseRef, rec);
+        e.target.reset();
+      }catch(err){
+        console.error("Error guardando en Realtime Database: ",err);
+        alert("Error guardando el registro.");
+      }
     });
 
     // Modal (ver)
     window.viewRecord=(r)=>{
-      const fechaObj = r.timestamp?.toDate?.() || null;
+      const fechaObj = r.timestamp ? new Date(r.timestamp) : null;
       const fechaStr = fmtFecha(fechaObj);
       const horaStr  = r.time || fmtHora(fechaObj);
       document.getElementById("modalBody").innerHTML=`
@@ -364,7 +423,7 @@
         <p><b>Nombre:</b> ${r.personName||""}</p>
         <p><b>Tipo:</b> ${r.type||""}</p>
         <p><b>Usuario:</b> ${r.assignedUser||""}</p>
-        <p><b>Descripción:</b><br>${(r.description||"").replace(/\n/g,"<br>")}</p>`;
+        <p><b>Descripción:</b><br>${(r.description||"").replace(/\\n/g,"<br>")}</p>`;
       document.getElementById("recordModal").style.display="flex";
     }
     window.closeModal=()=>{document.getElementById("recordModal").style.display="none";}
@@ -378,22 +437,31 @@
       window.scrollTo({top:0,behavior:"smooth"});
     }
 
-    // Actualizar (ejemplo simple: actualiza con lo que esté en el form)
+    // Actualizar (toma valores del form)
     window.updateRecord=async(id)=>{
-      const ref=doc(db,"atencion",id);
-      await updateDoc(ref,{
-        personName: personName.value,
-        type: attentionType.value,
-        assignedUser: assignedUser.value,
-        description: description.value
-      });
-      alert("Registro actualizado");
+      try {
+        await update(ref(db, "atencion/" + id), {
+          personName: personName.value,
+          type: attentionType.value,
+          assignedUser: assignedUser.value,
+          description: description.value
+        });
+        alert("Registro actualizado");
+      } catch(err){
+        console.error("Error al actualizar: ", err);
+        alert("No se pudo actualizar el registro.");
+      }
     }
 
     // Eliminar
     window.deleteRecord=async(id)=>{
       if(confirm("¿Eliminar registro?")){
-        await deleteDoc(doc(db,"atencion",id));
+        try {
+          await remove(ref(db, "atencion/" + id));
+        } catch(err){
+          console.error("Error al eliminar: ", err);
+          alert("No se pudo eliminar el registro.");
+        }
       }
     }
 
