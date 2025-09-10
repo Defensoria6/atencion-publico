@@ -46,7 +46,7 @@
     .btn-primary { background: linear-gradient(to bottom, var(--accent), var(--accent-dark)); color: #fff; border: none; }
     .btn-secondary { background:#e5f0ff; border:1px solid #a9c6ff; color:#0b5ed7; }
     .btn-danger { background:#ff3b30; color:#fff; border:none; }
-    .stats { display:grid; grid-template-columns: repeat(3,1fr); gap:12px; }
+    .stats { display:grid; grid-template-columns: repeat(4,1fr); gap:12px; }
     .stat-box { background:#eef5ff; border-radius: var(--radius); padding:16px; text-align:center; }
     .stat-number { font-size: clamp(18px, 3vw, 22px); font-weight:700; color:#0847a6; }
     .stat-label { font-size:12px; color:#0b5ed7; }
@@ -61,16 +61,19 @@
     .type-presencial { background:#eaf9ea; color:#2d9950; }
     .type-telefonica { background:#fff8e6; color:#b36a00; }
     .type-whatsapp { background:#f3e8ff; color:#7f3bb5; }
+    .type-zimbra { background:#ffe6e6; color:#cc0000; }
     .record-actions { display:flex; gap:6px; flex-wrap:wrap; }
     /* Compactar en pantallas medianas */
     @media (max-width: 1000px) {
       .main { grid-template-columns: 1fr; }
+      .stats { grid-template-columns: repeat(2, 1fr); }
       .record { grid-template-columns: 90px 70px 100px 1fr; }
       .record .record-actions { grid-column: 1 / -1; }
     }
     /* Diseño tipo tarjetas en móviles */
     @media (max-width: 640px) {
       .table-content { max-height: unset; }
+      .stats { grid-template-columns: 1fr; }
       .record { grid-template-columns: 1fr 1fr; grid-template-areas:
         "fecha hora"
         "tipo  tipo"
@@ -126,6 +129,7 @@
               <option value="presencial">Presencial</option>
               <option value="telefonica">Telefónica</option>
               <option value="whatsapp">WhatsApp</option>
+              <option value="zimbra">Por Correo Zimbra Institucional</option>
             </select>
           </div>
           <div class="form-group">
@@ -151,6 +155,7 @@
           <div class="stat-box"><div id="presentialCount" class="stat-number">0</div><div class="stat-label">Presenciales</div></div>
           <div class="stat-box"><div id="phoneCount" class="stat-number">0</div><div class="stat-label">Telefónicas</div></div>
           <div class="stat-box"><div id="whatsappCount" class="stat-number">0</div><div class="stat-label">WhatsApp</div></div>
+          <div class="stat-box"><div id="zimbraCount" class="stat-number">0</div><div class="stat-label">Zimbra</div></div>
         </div>
         <div class="chart-container">
           <canvas id="statsChart"></canvas>
@@ -324,7 +329,7 @@
       const filterPerson=document.getElementById("filterPerson").value.toLowerCase();
       const container=document.getElementById("recordsContainer");
       container.innerHTML="";
-      let stats={total:0,presencial:0,telefonica:0,whatsapp:0};
+      let stats={total:0,presencial:0,telefonica:0,whatsapp:0,zimbra:0};
 
       const filtered = records.filter(r=>{
         const fechaObj = r.timestamp ? new Date(r.timestamp) : null;
@@ -336,7 +341,8 @@
       });
 
       filtered.forEach(r=>{
-        stats.total++; if(stats[r.type]!==undefined) stats[r.type]++;
+        stats.total++; 
+        if(stats[r.type]!==undefined) stats[r.type]++;
         const fechaObj = r.timestamp ? new Date(r.timestamp) : null;
         const fechaStr = fmtFecha(fechaObj);
         const horaStr  = r.time || fmtHora(fechaObj);
@@ -364,6 +370,7 @@
       document.getElementById("presentialCount").textContent=stats.presencial;
       document.getElementById("phoneCount").textContent=stats.telefonica;
       document.getElementById("whatsappCount").textContent=stats.whatsapp;
+      document.getElementById("zimbraCount").textContent=stats.zimbra;
       updateChart(stats);
     }
 
@@ -373,10 +380,10 @@
       statsChart=new Chart(ctx,{
         type:"pie",
         data:{
-          labels:["Presenciales","Telefónicas","WhatsApp"],
+          labels:["Presenciales","Telefónicas","WhatsApp","Zimbra"],
           datasets:[{
-            data:[0,0,0],
-            backgroundColor:["#34c759","#ff9500","#af52de"]
+            data:[0,0,0,0],
+            backgroundColor:["#34c759","#ff9500","#af52de","#ff3b30"]
           }]
         },
         options:{
@@ -387,7 +394,7 @@
       });
     }
     function updateChart(stats){
-      statsChart.data.datasets[0].data=[stats.presencial,stats.telefonica,stats.whatsapp];
+      statsChart.data.datasets[0].data=[stats.presencial,stats.telefonica,stats.whatsapp,stats.zimbra];
       statsChart.update();
     }
 
