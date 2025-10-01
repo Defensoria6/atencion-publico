@@ -53,8 +53,9 @@
     .chart-container { max-width:320px; height:260px; margin:16px auto 0; }
     .records-table { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
     .table-header { background: #eaf2ff; padding: 12px clamp(12px,2vw,18px); font-weight: 700; border-bottom:1px solid #cfe0ff; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; color:#0b5ed7; }
-    .filters { display:flex; gap:8px; flex-wrap:wrap; width:100%; justify-content:flex-end; }
-    .filters > * { flex: 1 1 160px; min-width: 120px; }
+    .filters { display:flex; gap:8px; flex-wrap:wrap; width:100%; justify-content:space-between; } /* MODIFICADO para mejor distribución */
+    .filter-controls { display:flex; gap:8px; flex-wrap:wrap; } /* Nuevo contenedor para filtros de búsqueda */
+    .filter-controls > * { flex: 1 1 160px; min-width: 120px; } /* MODIFICADO */
     .table-content { max-height: min(60vh, 560px); overflow-y:auto; }
     .record { display:grid; grid-template-columns: 110px 80px 110px 1.2fr 1fr 260px; padding: 10px 12px; font-size:14px; border-bottom:1px solid #d7e6ff; gap: 8px; align-items:center; }
     .record-type { font-size:12px; padding:2px 6px; border-radius:6px; text-align:center; font-weight:700; }
@@ -63,12 +64,24 @@
     .type-whatsapp { background:#f3e8ff; color:#7f3bb5; }
     .type-zimbra { background:#ffe6e6; color:#cc0000; }
     .record-actions { display:flex; gap:6px; flex-wrap:wrap; }
+    /* Estilos para Paginación */
+    .pagination-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .pagination-controls select, .pagination-controls button {
+      padding: 6px 10px;
+      font-size: 13px;
+    }
     /* Compactar en pantallas medianas */
     @media (max-width: 1000px) {
       .main { grid-template-columns: 1fr; }
       .stats { grid-template-columns: repeat(2, 1fr); }
       .record { grid-template-columns: 90px 70px 100px 1fr; }
       .record .record-actions { grid-column: 1 / -1; }
+      .filters { flex-direction: column; align-items: flex-start; } /* MODIFICADO */
+      .filter-controls { width: 100%; justify-content: flex-end; } /* MODIFICADO */
     }
     /* Diseño tipo tarjetas en móviles */
     @media (max-width: 640px) {
@@ -89,6 +102,7 @@
       .record > div:nth-child(5) { grid-area: usuario; }
       .record > div:nth-child(6) { grid-area: acciones; }
       .filters > * { flex: 1 1 100%; min-width: 0; }
+      .filter-controls { flex-direction: column; } /* MODIFICADO */
       .chart-container { width: 100%; height: 220px; }
     }
     /* Modal */
@@ -114,7 +128,6 @@
     </div>
 
     <div class="main">
-      <!-- Formulario -->
       <div class="card">
         <h2>Registrar Atención</h2>
         <form id="attentionForm">
@@ -144,7 +157,6 @@
         </form>
       </div>
 
-      <!-- Estadísticas -->
       <div class="card" id="statsCard">
         <h2>
           Estadísticas del Día
@@ -163,15 +175,21 @@
       </div>
     </div>
 
-    <!-- Tabla de registros -->
     <div class="records-table">
       <div class="table-header">
         <span>Registro de Atenciones</span>
         <div class="filters">
-          <input type="date" id="filterDate">
-          <select id="filterUser"><option value="">Todos los usuarios</option></select>
-          <input type="text" id="filterPerson" placeholder="Buscar persona...">
-          <button id="printBtn" class="btn btn-secondary">🖨️ Imprimir Listado</button>
+          <div class="filter-controls">
+            <input type="date" id="filterDate">
+            <select id="filterUser"><option value="">Todos los usuarios</option></select>
+            <input type="text" id="filterPerson" placeholder="Buscar persona...">
+          </div>
+          
+          <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+            <div id="paginationControls" class="pagination-controls">
+              </div>
+            <button id="printBtn" class="btn btn-secondary">🖨️ Imprimir Listado</button>
+          </div>
         </div>
       </div>
       <div id="recordsContainer" class="table-content">
@@ -182,7 +200,6 @@
     </div>
   </div>
 
-  <!-- Modal de vista -->
   <div id="recordModal" class="modal">
     <div class="modal-content">
       <div class="modal-header">
@@ -193,7 +210,6 @@
     </div>
   </div>
 
-  <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script type="module">
     /* ========= Firebase App + Realtime Database ========= */
@@ -227,6 +243,11 @@
 
     let statsChart;
     let recordsCache = []; // cache local para filtros/orden
+    
+    // VARIABLES DE PAGINACIÓN AÑADIDAS
+    let currentPage = 1; 
+    const recordsPerPage = 10;
+    // FIN VARIABLES DE PAGINACIÓN AÑADIDAS
 
     const users = ["Bazante Nadia Romina","Boillat Cesar Enrique","Cardozo Maria Raquel","Cedron Noelia Aurora","Corrales Alicia Mariela","Escobar Monica Graciela","Fioravante Romulo","Gonzalez Alberto Misael","Gonzalez Juan Jose","Gudiño Natalia Esther","Magnani Enzo Luciano","Pablos Patricia","Palacios Ana Gabriela","Ortega Lucia Noemi","Ramos Marcelo Gustavo","Riveros Patricia Soledad","Sosa Rita Cecilia"];
 
@@ -280,9 +301,10 @@
     }
 
     function bindFilters(){
-      document.getElementById("filterDate").addEventListener("change", ()=> renderRecords(recordsCache));
-      document.getElementById("filterUser").addEventListener("change", ()=> renderRecords(recordsCache));
-      document.getElementById("filterPerson").addEventListener("input", ()=> renderRecords(recordsCache));
+      // Se añade el reinicio de la página actual al cambiar los filtros
+      document.getElementById("filterDate").addEventListener("change", ()=> { currentPage = 1; renderRecords(recordsCache); });
+      document.getElementById("filterUser").addEventListener("change", ()=> { currentPage = 1; renderRecords(recordsCache); });
+      document.getElementById("filterPerson").addEventListener("input", ()=> { currentPage = 1; renderRecords(recordsCache); });
     }
 
     function updateClock(){
@@ -318,11 +340,53 @@
         // Orden descendente por timestamp
         arr.sort((a,b) => (b.timestamp||0) - (a.timestamp||0));
         recordsCache = arr;
+        currentPage = 1; // Reiniciar página al recibir nuevos datos
         renderRecords(recordsCache);
       });
     }
 
-    /* ========= Render de registros + estadísticas ========= */
+    // FUNCIÓN PARA CAMBIAR LA PÁGINA
+    window.goToPage = (pageNumber) => {
+      currentPage = pageNumber;
+      renderRecords(recordsCache);
+      window.scrollTo({top: document.querySelector('.records-table').offsetTop, behavior: "smooth"}); // Scroll a la tabla
+    }
+
+    function createPaginationControls(totalRecords, currentPage, recordsPerPage, container){
+      container.innerHTML = "";
+      const totalPages = Math.ceil(totalRecords / recordsPerPage);
+
+      if (totalPages <= 1) return;
+
+      const prevBtn = document.createElement("button");
+      prevBtn.className = "btn btn-secondary";
+      prevBtn.textContent = "« Anterior";
+      prevBtn.disabled = currentPage === 1;
+      prevBtn.onclick = () => window.goToPage(currentPage - 1);
+      container.appendChild(prevBtn);
+
+      const select = document.createElement("select");
+      select.onchange = (e) => window.goToPage(parseInt(e.target.value));
+      
+      for (let i = 1; i <= totalPages; i++) {
+        const option = document.createElement("option");
+        option.value = i;
+        option.textContent = `Página ${i} de ${totalPages}`;
+        if (i === currentPage) option.selected = true;
+        select.appendChild(option);
+      }
+      container.appendChild(select);
+
+      const nextBtn = document.createElement("button");
+      nextBtn.className = "btn btn-secondary";
+      nextBtn.textContent = "Siguiente »";
+      nextBtn.disabled = currentPage === totalPages;
+      nextBtn.onclick = () => window.goToPage(currentPage + 1);
+      container.appendChild(nextBtn);
+    }
+    // FIN FUNCIÓN DE PAGINACIÓN
+
+    /* ========= Render de registros + estadísticas MODIFICADA ========= */
     function renderRecords(records){
       const filterDate=document.getElementById("filterDate").value; // YYYY-MM-DD
       const filterUser=document.getElementById("filterUser").value;
@@ -337,12 +401,25 @@
         if(filterDate && iso !== filterDate) return false;
         if(filterUser && r.assignedUser!==filterUser) return false;
         if(filterPerson && !(r.personName||"").toLowerCase().includes(filterPerson)) return false;
+        
+        // CÁLCULO DE ESTADÍSTICAS (SOBRE TODOS LOS FILTRADOS)
+        stats.total++; 
+        if(stats[r.type]!==undefined) stats[r.type]++;
         return true;
       });
 
-      filtered.forEach(r=>{
-        stats.total++; 
-        if(stats[r.type]!==undefined) stats[r.type]++;
+      // APLICAR PAGINACIÓN
+      const totalFiltered = filtered.length;
+      const startIndex = (currentPage - 1) * recordsPerPage;
+      const endIndex = startIndex + recordsPerPage;
+      const paginatedRecords = filtered.slice(startIndex, endIndex);
+
+      // CREAR CONTROLES DE PAGINACIÓN
+      const paginationContainer = document.getElementById("paginationControls");
+      createPaginationControls(totalFiltered, currentPage, recordsPerPage, paginationContainer);
+      // FIN PAGINACIÓN
+
+      paginatedRecords.forEach(r=>{ // Iterar sobre los registros paginados
         const fechaObj = r.timestamp ? new Date(r.timestamp) : null;
         const fechaStr = fmtFecha(fechaObj);
         const horaStr  = r.time || fmtHora(fechaObj);
@@ -363,10 +440,12 @@
         container.appendChild(div);
       });
 
-      if(!container.innerHTML.trim()){
+      if(totalFiltered === 0 || paginatedRecords.length === 0){
         container.innerHTML="<div style='padding:30px;text-align:center;color:var(--muted)'>No hay registros para mostrar</div>";
       }
-      document.getElementById("totalAttentions").textContent=stats.total;
+      
+      // Actualizar Estadísticas con el total de registros FILTRADOS (no solo los de la página)
+      document.getElementById("totalAttentions").textContent=totalFiltered;
       document.getElementById("presentialCount").textContent=stats.presencial;
       document.getElementById("phoneCount").textContent=stats.telefonica;
       document.getElementById("whatsappCount").textContent=stats.whatsapp;
