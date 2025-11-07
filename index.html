@@ -1,608 +1,557 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema Operador</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-  --background: oklch(1.0000 0 0);
-  --foreground: oklch(0.1884 0.0128 248.5103);
-  --card: oklch(0.9784 0.0011 197.1387);
-  --card-foreground: oklch(0.1884 0.0128 248.5103);
-  --popover: oklch(1.0000 0 0);
-  --popover-foreground: oklch(0.1884 0.0128 248.5103);
-  --primary: oklch(0.6723 0.1606 244.9955);
-  --primary-foreground: oklch(1.0000 0 0);
-  --secondary: oklch(0.1884 0.0128 248.5103);
-  --secondary-foreground: oklch(1.0000 0 0);
-  --muted: oklch(0.9222 0.0013 286.3737);
-  --muted-foreground: oklch(0.1884 0.0128 248.5103);
-  --accent: oklch(0.9392 0.0166 250.8453);
-  --accent-foreground: oklch(0.6723 0.1606 244.9955);
-  --destructive: oklch(0.6188 0.2376 25.7658);
-  --destructive-foreground: oklch(1.0000 0 0);
-  --border: oklch(0.9317 0.0118 231.6594);
-  --input: oklch(0.9809 0.0025 228.7836);
-  --ring: oklch(0.6818 0.1584 243.3540);
-  --chart-1: oklch(0.6723 0.1606 244.9955);
-  --chart-2: oklch(0.6907 0.1554 160.3454);
-  --chart-3: oklch(0.8214 0.1600 82.5337);
-  --chart-4: oklch(0.7064 0.1822 151.7125);
-  --chart-5: oklch(0.5919 0.2186 10.5826);
-  --sidebar: oklch(0.9784 0.0011 197.1387);
-  --sidebar-foreground: oklch(0.1884 0.0128 248.5103);
-  --sidebar-primary: oklch(0.6723 0.1606 244.9955);
-  --sidebar-primary-foreground: oklch(1.0000 0 0);
-  --sidebar-accent: oklch(0.9392 0.0166 250.8453);
-  --sidebar-accent-foreground: oklch(0.6723 0.1606 244.9955);
-  --sidebar-border: oklch(0.9271 0.0101 238.5177);
-  --sidebar-ring: oklch(0.6818 0.1584 243.3540);
-  --font-sans: Open Sans, sans-serif;
-  --font-serif: Georgia, serif;
-  --font-mono: Menlo, monospace;
-  --radius: 1.3rem;
-  --shadow-x: 0px;
-  --shadow-y: 2px;
-  --shadow-blur: 0px;
-  --shadow-spread: 0px;
-  --shadow-opacity: 0;
-  --shadow-color: rgba(29,161,242,0.15);
-  --shadow-2xs: 0px 2px 0px 0px hsl(202.8169 89.1213% 53.1373% / 0.00);
-  --shadow-xs: 0px 2px 0px 0px hsl(202.8169 89.1213% 53.1373% / 0.00);
-  --shadow-sm: 0px 2px 0px 0px hsl(202.8169 89.1213% 53.1373% / 0.00), 0px 1px 2px -1px hsl(202.8169 89.1213% 53.1373% / 0.00);
-  --shadow: 0px 2px 0px 0px hsl(202.8169 89.1213% 53.1373% / 0.00), 0px 1px 2px -1px hsl(202.8169 89.1213% 53.1373% / 0.00);
-  --shadow-md: 0px 2px 0px 0px hsl(202.8169 89.1213% 53.1373% / 0.00), 0px 2px 4px -1px hsl(202.8169 89.1213% 53.1373% / 0.00);
-  --shadow-lg: 0px 2px 0px 0px hsl(202.8169 89.1213% 53.1373% / 0.00), 0px 4px 6px -1px hsl(202.8169 89.1213% 53.1373% / 0.00);
-  --shadow-xl: 0px 2px 0px 0px hsl(202.8169 89.1213% 53.1373% / 0.00), 0px 8px 10px -1px hsl(202.8169 89.1213% 53.1373% / 0.00);
-  --shadow-2xl: 0px 2px 0px 0px hsl(202.8169 89.1213% 53.1373% / 0.00);
-  --tracking-normal: 0em;
-  --spacing: 0.25rem;
-}
-
-
-        body {
-            font-family: var(--font-sans);
-            background: var(--background);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            overflow: hidden;
-            color: var(--foreground);
-        }
-
-        /* Contenedor principal */
-        .login-container {
-            width: 100%;
-            max-width: 1000px;
-            display: flex;
-            background: var(--background);
-            border-radius: var(--radius);
-            box-shadow: var(--shadow-lg);
-            overflow: hidden;
-            min-height: 550px;
-            border: 1px solid var(--border);
-        }
-
-        /* Panel izquierdo - Información */
-        .left-panel {
-            flex: 1;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--chart-1) 100%);
-            padding: 50px 40px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .left-panel::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="rgba(255,255,255,0.03)"/></svg>');
-            background-size: cover;
-        }
-
-        .brand-content {
-            color: var(--primary-foreground);
-            z-index: 2;
-            position: relative;
-            text-align: center;
-        }
-
-        .brand-title {
-            font-size: 2.8rem;
-            font-weight: 700;
-            margin-bottom: 15px;
-            line-height: 1.1;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .brand-subtitle {
-            font-size: 1.4rem;
-            color: var(--primary-foreground);
-            margin-bottom: 30px;
-            font-weight: 500;
-            opacity: 0.9;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .platform-description {
-            font-size: 1.1rem;
-            color: var(--primary-foreground);
-            line-height: 1.6;
-            margin-top: 20px;
-            opacity: 0.8;
-        }
-
-        /* Panel derecho - Acceso */
-        .right-panel {
-            flex: 0.8;
-            background: var(--card);
-            padding: 50px 40px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            border-left: 1px solid var(--border);
-        }
-
-        .access-content {
-            text-align: center;
-        }
-
-        .access-icon {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--chart-1) 100%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 25px;
-            box-shadow: var(--shadow-md);
-        }
-
-        .access-icon i {
-            font-size: 35px;
-            color: var(--primary-foreground);
-        }
-
-        .access-title {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: var(--card-foreground);
-            margin-bottom: 10px;
-        }
-
-        .access-subtitle {
-            color: var(--muted-foreground);
-            margin-bottom: 30px;
-            font-size: 0.95rem;
-        }
-
-        .btn {
-            display: block;
-            width: 100%;
-            padding: 15px;
-            border: none;
-            border-radius: var(--radius);
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--chart-1) 100%);
-            color: var(--primary-foreground);
-            box-shadow: var(--shadow-sm);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .credit-section {
-            margin-top: 40px;
-            padding-top: 25px;
-            border-top: 1px solid var(--border);
-        }
-
-        .credit-title {
-            color: var(--muted-foreground);
-            font-size: 0.85rem;
-            margin-bottom: 5px;
-        }
-
-        .developer {
-            color: var(--card-foreground);
-            font-weight: 600;
-            font-size: 0.9rem;
-        }
-
-        /* Estilos para la aplicación principal - PANTALLA COMPLETA */
-        .app-container {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: var(--background);
-            z-index: 1000;
-        }
-
-        .navbar {
-            background: var(--card);
-            padding: 12px 20px;
-            border-bottom: 1px solid var(--border);
-            position: sticky;
-            top: 0;
-            z-index: 1001;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 60px;
-            box-shadow: var(--shadow-sm);
-        }
-
-        .navbar-brand {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: var(--card-foreground);
-            margin-right: 20px;
-        }
-
-        .navbar-links {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .nav-btn {
-            background: var(--primary);
-            color: var(--primary-foreground);
-            border: none;
-            padding: 8px 15px;
-            border-radius: calc(var(--radius) - 0.5rem);
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.85rem;
-            transition: all 0.3s ease;
-            box-shadow: var(--shadow-xs);
-            white-space: nowrap;
-        }
-        
-        .nav-btn:hover {
-            background: var(--chart-1);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-sm);
-        }
-
-        .logout-btn {
-            background: var(--destructive);
-            color: var(--destructive-foreground);
-            border: none;
-            padding: 8px 15px;
-            border-radius: calc(var(--radius) - 0.5rem);
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            margin-left: 12px;
-            box-shadow: var(--shadow-xs);
-            font-size: 0.85rem;
-        }
-
-        .logout-btn:hover {
-            background: var(--destructive);
-            filter: brightness(0.9);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-sm);
-        }
-
-        .main-content {
-            height: calc(100vh - 60px);
-            width: 100%;
-        }
-
-        .content-area {
-            height: 100%;
-            width: 100%;
-            padding: 0;
-            background: var(--background);
-        }
-
-        .iframe-container {
-            display: block;
-            width: 100%;
-            height: 100%;
-        }
-
-        .content-iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-            display: block;
-        }
-
-        /* Responsive para el texto del panel izquierdo */
-        @media (max-width: 1024px) {
-            .brand-title {
-                font-size: 2.4rem;
-            }
-            .brand-subtitle {
-                font-size: 1.2rem;
-            }
-        }
-
-        @media (max-width: 900px) {
-            .brand-title {
-                font-size: 2.1rem;
-            }
-            .brand-subtitle {
-                font-size: 1.1rem;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .login-container {
-                flex-direction: column;
-                max-width: 500px;
-            }
-            
-            .left-panel, .right-panel {
-                padding: 40px 30px;
-            }
-            
-            .right-panel {
-                border-left: none;
-                border-top: 1px solid var(--border);
-            }
-            
-            .brand-title {
-                font-size: 2.3rem;
-            }
-            
-            .brand-subtitle {
-                font-size: 1.3rem;
-            }
-
-            .navbar {
-                flex-direction: column;
-                height: auto;
-                padding: 10px;
-            }
-            
-            .navbar-brand {
-                margin-bottom: 10px;
-                margin-right: 0;
-            }
-            
-            .navbar-links {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-            
-            .nav-btn, .logout-btn {
-                font-size: 0.8rem;
-                padding: 6px 12px;
-            }
-            
-            .logout-btn {
-                margin-left: 0;
-                margin-top: 8px;
-            }
-        }
-
-        @media (max-width: 600px) {
-            .brand-title {
-                font-size: 2rem;
-            }
-            .brand-subtitle {
-                font-size: 1.1rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            body {
-                padding: 10px;
-            }
-            
-            .left-panel, .right-panel {
-                padding: 30px 20px;
-            }
-            
-            .brand-title {
-                font-size: 1.8rem;
-            }
-            
-            .brand-subtitle {
-                font-size: 1rem;
-            }
-            
-            .navbar-links {
-                gap: 5px;
-            }
-            
-            .nav-btn {
-                font-size: 0.75rem;
-                padding: 6px 10px;
-            }
-        }
-
-        @media (max-width: 400px) {
-            .brand-title {
-                font-size: 1.6rem;
-            }
-            .brand-subtitle {
-                font-size: 0.9rem;
-            }
-        }
-
-        @media (max-width: 360px) {
-            .brand-title {
-                font-size: 1.4rem;
-            }
-            .brand-subtitle {
-                font-size: 0.85rem;
-            }
-            
-            .navbar-links {
-                flex-direction: column;
-                width: 100%;
-            }
-            
-            .nav-btn, .logout-btn {
-                width: 100%;
-                margin: 2px 0;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Registro de Atención al Público - Defensoría Civil y Comercial 6</title>
+  <style>
+    :root {
+      --bg: #a3c8ff;
+      --card: #ffffffcc;
+      --accent: #007aff;
+      --accent-dark: #0051a8;
+      --text: #0b5ed7;
+      --muted: #0b5ed7cc;
+      --radius: 12px;
+      --shadow: 0 4px 12px rgba(0,0,0,.08);
+    }
+    * { box-sizing: border-box; margin:0; padding:0; }
+    html { height: 100%; }
+    body {
+      min-height: 100%;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding: clamp(12px, 2vw, 24px);
+    }
+    h1,h2 { font-weight:600; color: var(--text); }
+    .container { width: min(1200px, 100%); margin-inline: auto; display: flex; flex-direction: column; gap: clamp(12px, 2vw, 20px); }
+    .header { background: var(--card); padding: clamp(16px, 2vw, 24px); border-radius: var(--radius); box-shadow: var(--shadow); text-align: center; }
+    .header h1 { font-size: clamp(18px, 2.8vw, 26px); margin-bottom: 6px; }
+    .header p { color: var(--muted); font-size: clamp(12px, 1.8vw, 14px); }
+    .status-bar { background: var(--card); padding: 12px clamp(12px,2vw,20px); border-radius: var(--radius); box-shadow: var(--shadow); display: flex; justify-content: center; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .status-indicator { width: 10px; height: 10px; border-radius: 50%; }
+    .status-open { background:#34c759; }
+    .status-closed { background:#ff3b30; }
+    .main { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(12px,2vw,20px); }
+    .card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: clamp(14px, 2vw, 20px); }
+    .card h2 { font-size: clamp(16px, 2.2vw, 18px); margin-bottom: 12px; border-bottom: 1px solid #e5e5ea; padding-bottom: 6px; display:flex; justify-content:space-between; align-items:center; flex-wrap: wrap; gap: 10px; }
+    .form-group { margin-bottom: 12px; }
+    label { font-size: 14px; font-weight: 600; margin-bottom: 6px; display:block; color: var(--text); }
+    input,select,textarea {
+      width: 100%; padding: 10px 12px; border: 1px solid #bcd0f7; border-radius: 8px; background: #fff; font-size: 14px; color:#0b5ed7;
+    }
+    .btn { display:inline-block; border-radius:8px; padding:8px 12px; font-size:13px; font-weight:700; cursor:pointer; }
+    .btn-primary { background: linear-gradient(to bottom, var(--accent), var(--accent-dark)); color: #fff; border: none; }
+    .btn-secondary { background:#e5f0ff; border:1px solid #a9c6ff; color:#0b5ed7; }
+    .btn-danger { background:#ff3b30; color:#fff; border:none; }
+    .stats { display:grid; grid-template-columns: repeat(4,1fr); gap:12px; }
+    .stat-box { background:#eef5ff; border-radius: var(--radius); padding:16px; text-align:center; }
+    .stat-number { font-size: clamp(18px, 3vw, 22px); font-weight:700; color:#0847a6; }
+    .stat-label { font-size:12px; color:#0b5ed7; }
+    .chart-container { max-width:320px; height:260px; margin:16px auto 0; }
+    .records-table { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
+    .table-header { background: #eaf2ff; padding: 12px clamp(12px,2vw,18px); font-weight: 700; border-bottom:1px solid #cfe0ff; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; color:#0b5ed7; }
+    .filters { display:flex; gap:8px; flex-wrap:wrap; width:100%; justify-content:space-between; } /* MODIFICADO para mejor distribución */
+    .filter-controls { display:flex; gap:8px; flex-wrap:wrap; } /* Nuevo contenedor para filtros de búsqueda */
+    .filter-controls > * { flex: 1 1 160px; min-width: 120px; } /* MODIFICADO */
+    .table-content { max-height: min(60vh, 560px); overflow-y:auto; }
+    .record { display:grid; grid-template-columns: 110px 80px 110px 1.2fr 1fr 260px; padding: 10px 12px; font-size:14px; border-bottom:1px solid #d7e6ff; gap: 8px; align-items:center; }
+    .record-type { font-size:12px; padding:2px 6px; border-radius:6px; text-align:center; font-weight:700; }
+    .type-presencial { background:#eaf9ea; color:#2d9950; }
+    .type-telefonica { background:#fff8e6; color:#b36a00; }
+    .type-whatsapp { background:#f3e8ff; color:#7f3bb5; }
+    .type-zimbra { background:#ffe6e6; color:#cc0000; }
+    .record-actions { display:flex; gap:6px; flex-wrap:wrap; }
+    /* Estilos para Paginación */
+    .pagination-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .pagination-controls select, .pagination-controls button {
+      padding: 6px 10px;
+      font-size: 13px;
+    }
+    /* Compactar en pantallas medianas */
+    @media (max-width: 1000px) {
+      .main { grid-template-columns: 1fr; }
+      .stats { grid-template-columns: repeat(2, 1fr); }
+      .record { grid-template-columns: 90px 70px 100px 1fr; }
+      .record .record-actions { grid-column: 1 / -1; }
+      .filters { flex-direction: column; align-items: flex-start; } /* MODIFICADO */
+      .filter-controls { width: 100%; justify-content: flex-end; } /* MODIFICADO */
+    }
+    /* Diseño tipo tarjetas en móviles */
+    @media (max-width: 640px) {
+      .table-content { max-height: unset; }
+      .stats { grid-template-columns: 1fr; }
+      .record { grid-template-columns: 1fr 1fr; grid-template-areas:
+        "fecha hora"
+        "tipo  tipo"
+        "persona persona"
+        "usuario usuario"
+        "acciones acciones";
+        row-gap: 6px;
+      }
+      .record > div:nth-child(1) { grid-area: fecha; }
+      .record > div:nth-child(2) { grid-area: hora; text-align:right; }
+      .record > div:nth-child(3) { grid-area: tipo; }
+      .record > div:nth-child(4) { grid-area: persona; }
+      .record > div:nth-child(5) { grid-area: usuario; }
+      .record > div:nth-child(6) { grid-area: acciones; }
+      .filters > * { flex: 1 1 100%; min-width: 0; }
+      .filter-controls { flex-direction: column; } /* MODIFICADO */
+      .chart-container { width: 100%; height: 220px; }
+    }
+    /* Modal */
+    .modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,.5); justify-content:center; align-items:center; z-index:1000; padding: 16px; }
+    .modal-content { background:#fff; padding:20px; border-radius:var(--radius); max-width:600px; width:100%; max-height:80vh; overflow:auto; color:#0b5ed7; }
+    .modal-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+    .modal-header h3 { margin:0; color:#0b5ed7; }
+    .close-btn { background:none; border:none; font-size:20px; cursor:pointer; color:#0b5ed7; }
+  </style>
 </head>
 <body>
-    <!-- Contenedor de Login -->
-    <div id="loginContainer" class="login-container">
-        <!-- Panel izquierdo - Información -->
-        <div class="left-panel">
-            <div class="brand-content">
-                <h3 class="brand-title">Sistema Digital</h3>
-                <h2 class="brand-subtitle">Operador Defensoria Civil y Comercial 6</h2>
-                <p class="platform-description">Plataforma digital para atención al público. Registro de pase diario de expedientes.</p>
-            </div>
-        </div>
-
-        <!-- Panel derecho - Acceso -->
-        <div class="right-panel">
-            <div class="access-content">
-                <div class="access-icon">
-                    <i class="fas fa-lock"></i>
-                </div>
-                <h2 class="access-title">Acceso al Sistema</h2>
-                <p class="access-subtitle">Operadores autorizados</p>
-                
-                <button class="btn btn-primary" id="ingresarBtn" onclick="showAppAfterLogin()">
-                    <i class="fas fa-sign-in-alt"></i> Ingresar al Sistema
-                </button>
-                
-                <div class="credit-section">
-                    <div class="credit-title">Desarrollado por:</div>
-                    <div class="developer">Rómulo Fioravante - Leg. 2481 - 2025</div>
-                </div>
-            </div>
-        </div>
+  <div class="container">
+    <div class="header">
+      <h1>Registro de Atención al Público</h1>
+      <p>Defensoría Civil y Comercial 6 · Poder Judicial de Misiones</p>
+      <p style="margin-top:6px;font-weight:700;">Horario: Lunes a Viernes 07:00–12:00 (excepto sábados, domingos y feriados)</p>
     </div>
 
-    <!-- Contenedor de la Aplicación - PANTALLA COMPLETA -->
-    <div id="appContainer" class="app-container">
-        <nav class="navbar">
-            <div class="navbar-brand">Defensoría Civil y Comercial 6</div>
-            
-            <div class="navbar-links">
-                <button class="nav-btn" id="btnAtencionPublico" onclick="loadAtencionPublico()">
-                    <i class="fas fa-users"></i> Atención al Público
-                </button>
-                <button class="nav-btn" onclick="loadRegistroArt583()">
-                    <i class="fas fa-file-contract"></i> Registro Art 583
-                </button>
-                <button class="nav-btn" onclick="loadPaseCausas()">
-                    <i class="fas fa-exchange-alt"></i> Pase de Causas
-                </button>
-                <button class="logout-btn" onclick="showLogin()">
-                    <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
-                </button>
-            </div>
-        </nav>
-
-        <div class="main-content">
-            <main class="content-area">
-                <div id="iframeContainer" class="iframe-container">
-                    <iframe id="contentIframe" class="content-iframe" src=""></iframe>
-                </div>
-            </main>
-        </div>
+    <div class="status-bar">
+      <span id="statusIndicator" class="status-indicator"></span>
+      <span id="statusText"></span>
+      <span id="currentTime"></span>
     </div>
 
-    <script>
-        // URLs definidas
-        const URL_ATENCION_PUBLICO = 'https://sistemadigital.github.io/operador/atencion-publico.html';
-        const URL_REGISTRO_583 = 'https://sistemadigital.github.io/operador/583.html';
-        const URL_PASE_CAUSAS = 'https://sistemadigital.github.io/operador/pase.html';
-        
-        // Elementos de la interfaz
-        const loginContainer = document.getElementById('loginContainer');
-        const appContainer = document.getElementById('appContainer');
-        const contentIframe = document.getElementById('contentIframe');
-        const ingresarBtn = document.getElementById('ingresarBtn');
+    <div class="main">
+      <div class="card">
+        <h2>Registrar Atención</h2>
+        <form id="attentionForm">
+          <div class="form-group">
+            <label for="personName">Nombre de la Persona</label>
+            <input type="text" id="personName" required>
+          </div>
+          <div class="form-group">
+            <label for="attentionType">Tipo de Atención</label>
+            <select id="attentionType" required>
+              <option value="">Seleccionar</option>
+              <option value="presencial">Presencial</option>
+              <option value="telefonica">Telefónica</option>
+              <option value="whatsapp">WhatsApp</option>
+              <option value="zimbra">Por Correo Zimbra Institucional</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="assignedUser">Usuario Asignado</label>
+            <select id="assignedUser" required></select>
+          </div>
+          <div class="form-group">
+            <label for="description">Descripción del Caso</label>
+            <textarea id="description" rows="3"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Registrar</button>
+        </form>
+      </div>
 
-        /**
-         * Carga una URL específica en el iframe principal.
-         * @param {string} url - La URL a cargar.
-         */
-        function loadPage(url) {
-            contentIframe.src = url;
-        }
-        
-        // Funciones de carga para cada opción del menú
-        function loadAtencionPublico() {
-            loadPage(URL_ATENCION_PUBLICO);
-        }
+      <div class="card" id="statsCard">
+        <h2>
+          Estadísticas del Día
+          <button id="printStatsBtn" class="btn btn-secondary">🖨️ Imprimir</button>
+        </h2>
+        <div class="stats">
+          <div class="stat-box"><div id="totalAttentions" class="stat-number">0</div><div class="stat-label">Total</div></div>
+          <div class="stat-box"><div id="presentialCount" class="stat-number">0</div><div class="stat-label">Presenciales</div></div>
+          <div class="stat-box"><div id="phoneCount" class="stat-number">0</div><div class="stat-label">Telefónicas</div></div>
+          <div class="stat-box"><div id="whatsappCount" class="stat-number">0</div><div class="stat-label">WhatsApp</div></div>
+          <div class="stat-box"><div id="zimbraCount" class="stat-number">0</div><div class="stat-label">Zimbra</div></div>
+        </div>
+        <div class="chart-container">
+          <canvas id="statsChart"></canvas>
+        </div>
+      </div>
+    </div>
 
-        function loadRegistroArt583() {
-            loadPage(URL_REGISTRO_583);
-        }
+    <div class="records-table">
+      <div class="table-header">
+        <span>Registro de Atenciones</span>
+        <div class="filters">
+          <div class="filter-controls">
+            <input type="date" id="filterDate">
+            <select id="filterUser"><option value="">Todos los usuarios</option></select>
+            <input type="text" id="filterPerson" placeholder="Buscar persona...">
+          </div>
+          
+          <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+            <div id="paginationControls" class="pagination-controls">
+              </div>
+            <button id="printBtn" class="btn btn-secondary">🖨️ Imprimir Listado</button>
+          </div>
+        </div>
+      </div>
+      <div id="recordsContainer" class="table-content">
+        <div style="padding:30px;text-align:center;color:var(--muted)">
+          No hay registros para mostrar
+        </div>
+      </div>
+    </div>
+  </div>
 
-        function loadPaseCausas() {
-            loadPage(URL_PASE_CAUSAS);
-        }
-        
-        // Funciones para la interfaz (Login/Logout)
-        function showAppAfterLogin() {
-            // Ocultar el login y mostrar la aplicación en pantalla completa
-            loginContainer.style.display = 'none';
-            appContainer.style.display = 'block';
-            document.body.style.overflow = 'hidden'; // Prevenir scroll en el body
-            
-            // Cargar Atención al Público por defecto al ingresar
-            loadAtencionPublico(); 
-        }
+  <div id="recordModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Detalle de Atención</h3>
+        <button class="close-btn" onclick="closeModal()">✕</button>
+      </div>
+      <div id="modalBody"></div>
+    </div>
+  </div>
 
-        function showLogin() {
-            // Mostrar el login y ocultar la aplicación
-            loginContainer.style.display = 'flex';
-            appContainer.style.display = 'none';
-            document.body.style.overflow = 'auto'; // Restaurar scroll en el body
-            contentIframe.src = ''; // Limpiar el iframe al cerrar sesión
-        }
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script type="module">
+    /* ========= Firebase App + Realtime Database ========= */
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+    import {
+      getDatabase, ref, push, onValue, update, remove,
+      serverTimestamp, query, orderByChild
+    } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
-        // Event listener para ingresar con la tecla Enter
-        document.addEventListener('DOMContentLoaded', () => {
-            ingresarBtn.focus();
-            document.addEventListener('keydown', (event) => {
-                if (event.key === 'Enter' && loginContainer.style.display !== 'none') {
-                    showAppAfterLogin();
-                }
-            });
+    /* ========= Configuración ========= */
+    const firebaseConfig = {
+      apiKey: "AIzaSyDgxLS98sk6GkLrjMu3BVS2cmZ9exdh4dY",
+      authDomain: "atencion-publico-def6.firebaseapp.com",
+      databaseURL: "https://atencion-publico-def6-default-rtdb.firebaseio.com",
+      projectId: "atencion-publico-def6",
+      storageBucket: "atencion-publico-def6.firebasestorage.app",
+      messagingSenderId: "1052433106688",
+      appId: "1:1052433106688:web:8ac3e144bcf377ac4b55e5"
+    };
+
+    // Horario de atención y feriados (formato DD/MM/AAAA)
+    const OPEN_HOUR = 7;
+    const CLOSE_HOUR = 12;
+    const FERIADOS = [
+      // "01/01/2025","24/03/2025","02/04/2025","01/05/2025","09/07/2025","08/12/2025","25/12/2025"
+    ];
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const baseRef = ref(db, "atencion");
+
+    let statsChart;
+    let recordsCache = []; // cache local para filtros/orden
+    
+    // VARIABLES DE PAGINACIÓN AÑADIDAS
+    let currentPage = 1; 
+    const recordsPerPage = 10;
+    // FIN VARIABLES DE PAGINACIÓN AÑADIDAS
+
+    const users = ["Bazante Nadia Romina","Boillat Cesar Enrique","Cardozo Maria Raquel","Cedron Noelia Aurora","Corrales Alicia Mariela","Escobar Monica Graciela","Fioravante Romulo","Gonzalez Alberto Misael","Gonzalez Juan Jose","Gudiño Natalia Esther","Magnani Enzo Luciano","Pablos Patricia","Palacios Ana Gabriela","Ortega Lucia Noemi","Ramos Marcelo Gustavo","Riveros Patricia Soledad","Sosa Rita Cecilia"];
+
+    /* ========= Utilidades de fecha/hora (DD/MM/AAAA y 24h) ========= */
+    const fmtFecha = (d)=> d ? d.toLocaleDateString("es-AR") : "-"; // DD/MM/AAAA
+    const fmtHora = (d)=> d ? d.toLocaleTimeString("es-AR", {hour12:false, hour:"2-digit", minute:"2-digit"}) : "--:--";
+
+    function esFeriado(date){
+      const ddmmyyyy = fmtFecha(date);
+      return FERIADOS.includes(ddmmyyyy);
+    }
+
+    function oficinaAbierta(date = new Date()){
+      const d = date.getDay(); // 0-dom,6-sab
+      if (d === 0 || d === 6) return false;
+      if (esFeriado(date)) return false;
+      const h = date.getHours();
+      return h >= OPEN_HOUR && h < CLOSE_HOUR; // 07:00–11:59
+    }
+
+    /* ========= Inicialización ========= */
+    function init(){
+      const sel=document.getElementById("assignedUser");
+      const filterSel=document.getElementById("filterUser");
+      users.forEach(u=>{
+        let o=document.createElement("option"); o.value=u; o.textContent=u;
+        sel.appendChild(o.cloneNode(true));
+        filterSel.appendChild(o);
+      });
+      updateClock(); updateStatus();
+      setInterval(()=>{updateClock();updateStatus();},60000);
+      initChart();
+      bindPrinting();
+      bindFilters();
+      startRealtime();
+    }
+
+    function bindPrinting(){
+      document.getElementById("printBtn").addEventListener("click", ()=>{
+        const w = window.open("", "_blank");
+        const html = document.querySelector(".records-table").outerHTML;
+        w.document.write(`<html><head><title>Listado</title><meta name="viewport" content="width=device-width, initial-scale=1.0"></head><body>${html}</body></html>`);
+        w.document.close(); w.focus(); w.print();
+      });
+      document.getElementById("printStatsBtn").addEventListener("click", ()=>{
+        const w = window.open("", "_blank");
+        const html = document.getElementById("statsCard").outerHTML;
+        w.document.write(`<html><head><title>Estadísticas</title><meta name="viewport" content="width=device-width, initial-scale=1.0"></head><body>${html}</body></html>`);
+        w.document.close(); w.focus(); w.print();
+      });
+    }
+
+    function bindFilters(){
+      // Se añade el reinicio de la página actual al cambiar los filtros
+      document.getElementById("filterDate").addEventListener("change", ()=> { currentPage = 1; renderRecords(recordsCache); });
+      document.getElementById("filterUser").addEventListener("change", ()=> { currentPage = 1; renderRecords(recordsCache); });
+      document.getElementById("filterPerson").addEventListener("input", ()=> { currentPage = 1; renderRecords(recordsCache); });
+    }
+
+    function updateClock(){
+      const now=new Date();
+      document.getElementById("currentTime").textContent="· " + fmtFecha(now) + " " + fmtHora(now);
+    }
+
+    function updateStatus(){
+      const ind=document.getElementById("statusIndicator");
+      const txt=document.getElementById("statusText");
+      const form=document.getElementById("attentionForm");
+      if(oficinaAbierta()){
+        ind.className="status-indicator status-open";
+        txt.textContent="Oficina Abierta (Lun–Vie 07:00–12:00)";
+        form.querySelectorAll("input,select,textarea,button").forEach(el=>el.disabled=false);
+      }else{
+        ind.className="status-indicator status-closed";
+        txt.textContent="Oficina Cerrada (sábados, domingos o fuera de horario / feriado)";
+        form.querySelectorAll("input,select,textarea,button").forEach(el=>el.disabled=true);
+      }
+    }
+
+    /* ========= Realtime Database (listen) ========= */
+    function startRealtime(){
+      // Ordenaremos por timestamp en cliente (desc), ya que Realtime Database no tiene "desc"
+      const qRef = query(baseRef, orderByChild("timestamp"));
+      onValue(qRef, (snapshot)=>{
+        const arr = [];
+        snapshot.forEach(child => {
+          const val = child.val() || {};
+          arr.push({ ...val, id: child.key });
         });
-    </script>
+        // Orden descendente por timestamp
+        arr.sort((a,b) => (b.timestamp||0) - (a.timestamp||0));
+        recordsCache = arr;
+        currentPage = 1; // Reiniciar página al recibir nuevos datos
+        renderRecords(recordsCache);
+      });
+    }
+
+    // FUNCIÓN PARA CAMBIAR LA PÁGINA
+    window.goToPage = (pageNumber) => {
+      currentPage = pageNumber;
+      renderRecords(recordsCache);
+      window.scrollTo({top: document.querySelector('.records-table').offsetTop, behavior: "smooth"}); // Scroll a la tabla
+    }
+
+    function createPaginationControls(totalRecords, currentPage, recordsPerPage, container){
+      container.innerHTML = "";
+      const totalPages = Math.ceil(totalRecords / recordsPerPage);
+
+      if (totalPages <= 1) return;
+
+      const prevBtn = document.createElement("button");
+      prevBtn.className = "btn btn-secondary";
+      prevBtn.textContent = "« Anterior";
+      prevBtn.disabled = currentPage === 1;
+      prevBtn.onclick = () => window.goToPage(currentPage - 1);
+      container.appendChild(prevBtn);
+
+      const select = document.createElement("select");
+      select.onchange = (e) => window.goToPage(parseInt(e.target.value));
+      
+      for (let i = 1; i <= totalPages; i++) {
+        const option = document.createElement("option");
+        option.value = i;
+        option.textContent = `Página ${i} de ${totalPages}`;
+        if (i === currentPage) option.selected = true;
+        select.appendChild(option);
+      }
+      container.appendChild(select);
+
+      const nextBtn = document.createElement("button");
+      nextBtn.className = "btn btn-secondary";
+      nextBtn.textContent = "Siguiente »";
+      nextBtn.disabled = currentPage === totalPages;
+      nextBtn.onclick = () => window.goToPage(currentPage + 1);
+      container.appendChild(nextBtn);
+    }
+    // FIN FUNCIÓN DE PAGINACIÓN
+
+    /* ========= Render de registros + estadísticas MODIFICADA ========= */
+    function renderRecords(records){
+      const filterDate=document.getElementById("filterDate").value; // YYYY-MM-DD
+      const filterUser=document.getElementById("filterUser").value;
+      const filterPerson=document.getElementById("filterPerson").value.toLowerCase();
+      const container=document.getElementById("recordsContainer");
+      container.innerHTML="";
+      let stats={total:0,presencial:0,telefonica:0,whatsapp:0,zimbra:0};
+
+      const filtered = records.filter(r=>{
+        const fechaObj = r.timestamp ? new Date(r.timestamp) : null;
+        const iso = fechaObj ? new Date(fechaObj.getTime() - (fechaObj.getTimezoneOffset()*60000)).toISOString().slice(0,10) : null;
+        if(filterDate && iso !== filterDate) return false;
+        if(filterUser && r.assignedUser!==filterUser) return false;
+        if(filterPerson && !(r.personName||"").toLowerCase().includes(filterPerson)) return false;
+        
+        // CÁLCULO DE ESTADÍSTICAS (SOBRE TODOS LOS FILTRADOS)
+        stats.total++; 
+        if(stats[r.type]!==undefined) stats[r.type]++;
+        return true;
+      });
+
+      // APLICAR PAGINACIÓN
+      const totalFiltered = filtered.length;
+      const startIndex = (currentPage - 1) * recordsPerPage;
+      const endIndex = startIndex + recordsPerPage;
+      const paginatedRecords = filtered.slice(startIndex, endIndex);
+
+      // CREAR CONTROLES DE PAGINACIÓN
+      const paginationContainer = document.getElementById("paginationControls");
+      createPaginationControls(totalFiltered, currentPage, recordsPerPage, paginationContainer);
+      // FIN PAGINACIÓN
+
+      paginatedRecords.forEach(r=>{ // Iterar sobre los registros paginados
+        const fechaObj = r.timestamp ? new Date(r.timestamp) : null;
+        const fechaStr = fmtFecha(fechaObj);
+        const horaStr  = r.time || fmtHora(fechaObj);
+        const div=document.createElement("div");
+        div.className="record";
+        div.innerHTML=`
+          <div>${fechaStr}</div>
+          <div>${horaStr}</div>
+          <div class="record-type type-${r.type}">${r.type ? (r.type[0].toUpperCase()+r.type.slice(1)) : "-"}</div>
+          <div><strong>${r.personName||""}</strong></div>
+          <div>${r.assignedUser||""}</div>
+          <div class="record-actions">
+            <button class="btn btn-secondary" onclick='viewRecord(${JSON.stringify(r)})'>Ver</button>
+            <button class="btn btn-primary" onclick='editRecord(${JSON.stringify(r)})'>Editar</button>
+            <button class="btn btn-primary" onclick='updateRecord(${JSON.stringify(r.id)})'>Actualizar</button>
+            <button class="btn btn-danger" onclick='deleteRecord(${JSON.stringify(r.id)})'>Eliminar</button>
+          </div>`;
+        container.appendChild(div);
+      });
+
+      if(totalFiltered === 0 || paginatedRecords.length === 0){
+        container.innerHTML="<div style='padding:30px;text-align:center;color:var(--muted)'>No hay registros para mostrar</div>";
+      }
+      
+      // Actualizar Estadísticas con el total de registros FILTRADOS (no solo los de la página)
+      document.getElementById("totalAttentions").textContent=totalFiltered;
+      document.getElementById("presentialCount").textContent=stats.presencial;
+      document.getElementById("phoneCount").textContent=stats.telefonica;
+      document.getElementById("whatsappCount").textContent=stats.whatsapp;
+      document.getElementById("zimbraCount").textContent=stats.zimbra;
+      updateChart(stats);
+    }
+
+    /* ========= Gráfico ========= */
+    function initChart(){
+      const ctx=document.getElementById("statsChart");
+      statsChart=new Chart(ctx,{
+        type:"pie",
+        data:{
+          labels:["Presenciales","Telefónicas","WhatsApp","Zimbra"],
+          datasets:[{
+            data:[0,0,0,0],
+            backgroundColor:["#34c759","#ff9500","#af52de","#ff3b30"]
+          }]
+        },
+        options:{
+          responsive:true,
+          maintainAspectRatio:false,
+          plugins:{ legend:{ position:"bottom" } }
+        }
+      });
+    }
+    function updateChart(stats){
+      statsChart.data.datasets[0].data=[stats.presencial,stats.telefonica,stats.whatsapp,stats.zimbra];
+      statsChart.update();
+    }
+
+    /* ========= Alta / Edición / Actualización / Eliminación ========= */
+    document.getElementById("attentionForm").addEventListener("submit",async(e)=>{
+      e.preventDefault();
+      if(!oficinaAbierta()){ alert("Oficina cerrada (Lun–Vie 07:00–12:00, excepto feriados)."); return; }
+      const now=new Date();
+      const rec={
+        time: fmtHora(now),
+        personName: personName.value,
+        type: attentionType.value,
+        assignedUser: assignedUser.value,
+        description: description.value,
+        timestamp: serverTimestamp()
+      };
+      try{
+        await push(baseRef, rec);
+        e.target.reset();
+      }catch(err){
+        console.error("Error guardando en Realtime Database: ",err);
+        alert("Error guardando el registro.");
+      }
+    });
+
+    // Modal (ver)
+    window.viewRecord=(r)=>{
+      const fechaObj = r.timestamp ? new Date(r.timestamp) : null;
+      const fechaStr = fmtFecha(fechaObj);
+      const horaStr  = r.time || fmtHora(fechaObj);
+      document.getElementById("modalBody").innerHTML=`
+        <p><b>Fecha:</b> ${fechaStr} ${horaStr}</p>
+        <p><b>Nombre:</b> ${r.personName||""}</p>
+        <p><b>Tipo:</b> ${r.type||""}</p>
+        <p><b>Usuario:</b> ${r.assignedUser||""}</p>
+        <p><b>Descripción:</b><br>${(r.description||"").replace(/\\n/g,"<br>")}</p>`;
+      document.getElementById("recordModal").style.display="flex";
+    }
+    window.closeModal=()=>{document.getElementById("recordModal").style.display="none";}
+
+    // Editar (carga en el form)
+    window.editRecord=(r)=>{
+      personName.value=r.personName||"";
+      attentionType.value=r.type||"";
+      assignedUser.value=r.assignedUser||"";
+      description.value=r.description||"";
+      window.scrollTo({top:0,behavior:"smooth"});
+    }
+
+    // Actualizar (toma valores del form)
+    window.updateRecord=async(id)=>{
+      try {
+        await update(ref(db, "atencion/" + id), {
+          personName: personName.value,
+          type: attentionType.value,
+          assignedUser: assignedUser.value,
+          description: description.value
+        });
+        alert("Registro actualizado");
+      } catch(err){
+        console.error("Error al actualizar: ", err);
+        alert("No se pudo actualizar el registro.");
+      }
+    }
+
+    // Eliminar
+    window.deleteRecord=async(id)=>{
+      if(confirm("¿Eliminar registro?")){
+        try {
+          await remove(ref(db, "atencion/" + id));
+        } catch(err){
+          console.error("Error al eliminar: ", err);
+          alert("No se pudo eliminar el registro.");
+        }
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded",init);
+  </script>
 </body>
 </html>
